@@ -470,8 +470,11 @@
       }
       var parsed = JSON.parse(raw);
       // Bổ sung các khoá còn thiếu (an toàn khi nâng cấp phiên bản)
+      // Lưu ý: KHÔNG điền seedVersion ở đây, nếu không migrateSeed() sẽ tưởng
+      // dữ liệu đã mới nhất và bỏ qua việc bổ sung sản phẩm mới.
       var base = seedData();
       Object.keys(base).forEach(function (k) {
+        if (k === 'seedVersion') return;
         if (parsed[k] === undefined) parsed[k] = base[k];
       });
       state = parsed;
