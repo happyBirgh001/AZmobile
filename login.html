@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập / Đăng ký — AZmobile</title>
+  <meta name="theme-color" content="#0a1120">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="auth">
+  <aside class="auth__aside">
+    <a class="brand brand--footer" href="index.html" style="margin-bottom:34px">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="38" height="38" fill="none">
+          <rect x="1.5" y="1.5" width="29" height="29" rx="9" fill="url(#bmg2)"/>
+          <path d="M10 21.5 16 9.5l6 12" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12.6 17.4h6.8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+          <defs><linearGradient id="bmg2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+        </svg>
+      </span>
+      <span class="brand__text"><strong style="color:#fff">AZ<span style="color:#60a5fa">mobile</span></strong><small>Laptop &amp; Phụ kiện</small></span>
+    </a>
+
+    <h2>Một tài khoản,<br>trọn vẹn tiện ích</h2>
+    <p>Đăng nhập để theo dõi đơn hàng, lưu lịch sử bảo hành và nhận ưu đãi dành riêng cho khách hàng AZmobile.</p>
+    <ul class="auth__list">
+      <li><svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Theo dõi đơn hàng theo thời gian thực</span></li>
+      <li><svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Quản lý lịch hẹn sửa chữa, bảo hành</span></li>
+      <li><svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Ưu đãi và thông báo sản phẩm mới</span></li>
+      <li><svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Dữ liệu lưu trên trình duyệt, không cần chờ duyệt</span></li>
+    </ul>
+  </aside>
+
+  <main class="auth__main">
+    <div class="auth__card">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:#64748b;margin-bottom:20px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        Về trang chủ
+      </a>
+
+      <div class="auth__head">
+        <h1 id="auth-title">Đăng nhập</h1>
+        <p id="auth-sub">Chào mừng bạn trở lại AZmobile.</p>
+      </div>
+
+      <div class="tabs" id="auth-tabs">
+        <button type="button" class="is-active" data-mode="login">Đăng nhập</button>
+        <button type="button" data-mode="register">Đăng ký</button>
+      </div>
+
+      <!-- Đăng nhập -->
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label for="lg-email">Email <span class="req">*</span></label>
+          <input class="input" id="lg-email" type="email" placeholder="email@example.com" autocomplete="email" required>
+          <span class="field__err">Email không hợp lệ.</span>
+        </div>
+        <div class="field">
+          <label for="lg-pass">Mật khẩu <span class="req">*</span></label>
+          <input class="input" id="lg-pass" type="password" placeholder="••••••••" autocomplete="current-password" required>
+          <span class="field__err">Mật khẩu tối thiểu 6 ký tự.</span>
+        </div>
+        <button class="btn btn--primary btn--block btn--lg" type="submit">Đăng nhập</button>
+      </form>
+
+      <!-- Đăng ký -->
+      <form id="register-form" novalidate style="display:none">
+        <div class="field">
+          <label for="rg-name">Họ và tên <span class="req">*</span></label>
+          <input class="input" id="rg-name" type="text" placeholder="Nguyễn Văn A" autocomplete="name" required>
+          <span class="field__err">Vui lòng nhập họ tên (ít nhất 2 ký tự).</span>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="rg-email">Email <span class="req">*</span></label>
+            <input class="input" id="rg-email" type="email" placeholder="email@example.com" autocomplete="email" required>
+            <span class="field__err">Email không hợp lệ.</span>
+          </div>
+          <div class="field">
+            <label for="rg-phone">Số điện thoại</label>
+            <input class="input" id="rg-phone" type="tel" placeholder="0912 345 678" autocomplete="tel">
+          </div>
+        </div>
+        <div class="field">
+          <label for="rg-pass">Mật khẩu <span class="req">*</span></label>
+          <input class="input" id="rg-pass" type="password" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password" required>
+          <span class="field__err">Mật khẩu tối thiểu 6 ký tự.</span>
+        </div>
+        <div class="field">
+          <label for="rg-pass2">Nhập lại mật khẩu <span class="req">*</span></label>
+          <input class="input" id="rg-pass2" type="password" placeholder="Nhập lại mật khẩu" autocomplete="new-password" required>
+          <span class="field__err">Mật khẩu nhập lại không khớp.</span>
+        </div>
+        <label class="check" style="margin-bottom:18px">
+          <input type="checkbox" id="rg-agree" checked>
+          <span>Tôi đồng ý với điều khoản sử dụng và chính sách bảo mật của AZmobile.</span>
+        </label>
+        <button class="btn btn--primary btn--block btn--lg" type="submit">Tạo tài khoản</button>
+      </form>
+
+      <div class="auth__demo">
+        <b>Tài khoản dùng thử</b><br>
+        Quản trị: <code>admin@azmobile.vn</code> / <code>admin123</code><br>
+        Khách hàng: <code>khach@azmobile.vn</code> / <code>123456</code>
+      </div>
+
+      <p class="auth__foot" id="auth-foot">Bạn chưa có tài khoản? <a href="#" data-switch="register">Đăng ký ngay</a></p>
+    </div>
+  </main>
+</div>
+
+<div id="toast-host" class="toast-host"></div>
+
+<script src="assets/js/db.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/login.js"></script>
+</body>
+</html>

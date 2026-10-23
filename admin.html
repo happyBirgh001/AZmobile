@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản trị — AZmobile</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0a1120">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body class="admin-body">
+
+<div class="ad">
+  <!-- SIDEBAR -->
+  <aside class="ad__side" id="ad-side">
+    <div class="ad__brand">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="32" height="32" fill="none">
+          <rect x="1.5" y="1.5" width="29" height="29" rx="9" fill="url(#bmg3)"/>
+          <path d="M10 21.5 16 9.5l6 12" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12.6 17.4h6.8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+          <defs><linearGradient id="bmg3" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+        </svg>
+      </span>
+      <span class="brand__text"><strong>AZ<span>mobile</span></strong><small>Admin Panel</small></span>
+    </div>
+
+    <div class="ad__navlabel">Tổng quan</div>
+    <nav class="ad__nav">
+      <button type="button" data-view="dashboard" class="is-active">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+        Bảng điều khiển
+      </button>
+    </nav>
+
+    <div class="ad__navlabel">Bán hàng</div>
+    <nav class="ad__nav">
+      <button type="button" data-view="orders">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-3-2V3Z"/><path d="M9 8h6M9 12h6"/></svg>
+        Đơn hàng <span class="badge-n" id="nav-orders">0</span>
+      </button>
+      <button type="button" data-view="products">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg>
+        Sản phẩm <span class="badge-n" id="nav-products">0</span>
+      </button>
+      <button type="button" data-view="categories">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12 12 20l-9-9V3h8l9 9Z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>
+        Danh mục <span class="badge-n" id="nav-cats">0</span>
+      </button>
+      <button type="button" data-view="services">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 1 0 5 5L21 21l-2 2-9.7-9.7a4 4 0 0 1-5-5L7 5l3 3 3-3-3-3 4.7 1.3Z"/></svg>
+        Dịch vụ
+      </button>
+      <button type="button" data-view="bookings">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        Lịch hẹn <span class="badge-n" id="nav-bookings">0</span>
+      </button>
+    </nav>
+
+    <div class="ad__navlabel">Hệ thống</div>
+    <nav class="ad__nav">
+      <button type="button" data-view="customers">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3.1-5.5 7-5.5s7 2 7 5.5"/><path d="M17 5.2A3.5 3.5 0 0 1 17 12M18 20c0-2.2-.7-3.8-2-4.8"/></svg>
+        Khách hàng <span class="badge-n" id="nav-users">0</span>
+      </button>
+      <button type="button" data-view="settings">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2 2 2 0 1 1-4 0 1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3 15a2 2 0 1 1 0-4 1.7 1.7 0 0 0 1.5-2.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10 4a2 2 0 1 1 4 0 1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 21 11a2 2 0 1 1 0 4Z"/></svg>
+        Cài đặt
+      </button>
+    </nav>
+
+    <div class="ad__sidefoot">
+      <div class="ad__user">
+        <span class="ad__user__ava" id="ad-ava">A</span>
+        <div class="ad__user__meta">
+          <b id="ad-uname">Quản trị viên</b>
+          <small id="ad-uemail">admin@azmobile.vn</small>
+        </div>
+        <button type="button" id="ad-logout" title="Đăng xuất">
+          <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="ad__main">
+    <header class="ad__top">
+      <button class="icon-btn ad__menu-btn" type="button" id="ad-menu">
+        <svg class="ico" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <div class="ad__title">
+        <h1 id="ad-title">Bảng điều khiển</h1>
+        <p id="ad-sub">Tổng quan hoạt động kinh doanh của AZmobile</p>
+      </div>
+      <div class="ad__top__actions">
+        <div class="ad__search">
+          <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input type="search" id="ad-search" placeholder="Tìm sản phẩm, đơn hàng...">
+        </div>
+        <a class="btn btn--ghost btn--sm" href="index.html" target="_blank" rel="noopener">
+          <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          Xem website
+        </a>
+      </div>
+    </header>
+
+    <div class="ad__content">
+      <!-- DASHBOARD -->
+      <section class="ad__view is-active" id="view-dashboard">
+        <div class="kpis" id="kpis"></div>
+        <div class="ad-grid">
+          <div class="card">
+            <div class="card__head">
+              <div><h3>Doanh thu 6 tháng gần nhất</h3><small id="chart-sub">Đơn không tính đã huỷ</small></div>
+              <div class="card__head__right"><span class="chip chip--ok" id="chart-total">—</span></div>
+            </div>
+            <div class="card__body"><div class="chart" id="chart"></div></div>
+          </div>
+          <div class="card">
+            <div class="card__head"><h3>Danh mục theo tồn kho</h3></div>
+            <div class="card__body"><div class="catbars" id="catbars"></div></div>
+          </div>
+        </div>
+
+        <div class="ad-grid">
+          <div class="card">
+            <div class="card__head">
+              <div><h3>Đơn hàng gần đây</h3></div>
+              <div class="card__head__right"><button class="btn btn--ghost btn--sm" type="button" data-goto="orders">Xem tất cả</button></div>
+            </div>
+            <div class="card__body card__body--flush"><div class="table-wrap" id="recent-orders"></div></div>
+          </div>
+          <div class="card">
+            <div class="card__head"><h3>Sản phẩm bán chạy</h3></div>
+            <div class="card__body"><div class="catbars" id="top-products"></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__head">
+            <div><h3>Cảnh báo tồn kho</h3><small>Sản phẩm còn từ 5 chiếc trở xuống</small></div>
+          </div>
+          <div class="card__body card__body--flush"><div class="table-wrap" id="low-stock"></div></div>
+        </div>
+      </section>
+
+      <!-- PRODUCTS -->
+      <section class="ad__view" id="view-products">
+        <div class="toolbar">
+          <input class="input" type="search" id="p-search" placeholder="Tìm theo tên, thương hiệu..." style="min-width:240px">
+          <select class="select" id="p-cat"></select>
+          <div class="toolbar__right">
+            <button class="btn btn--primary btn--sm" type="button" id="p-add">
+              <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Thêm sản phẩm
+            </button>
+          </div>
+        </div>
+        <div class="card"><div class="table-wrap" id="products-table"></div></div>
+      </section>
+
+      <!-- CATEGORIES -->
+      <section class="ad__view" id="view-categories">
+        <div class="hint-box">
+          <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <span>Danh mục đang chứa sản phẩm sẽ không thể xoá. Hãy chuyển hoặc xoá sản phẩm trước.</span>
+        </div>
+        <div class="toolbar">
+          <div class="toolbar__right">
+            <button class="btn btn--primary btn--sm" type="button" id="c-add">
+              <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Thêm danh mục
+            </button>
+          </div>
+        </div>
+        <div class="ad-grid ad-grid--3">
+          <div class="card"><div class="card__head"><h3>Danh sách danh mục</h3></div>
+            <div class="card__body"><div class="cat-list" id="cat-list"></div></div></div>
+          <div class="card"><div class="card__head"><h3>Phân bổ sản phẩm</h3></div>
+            <div class="card__body"><div class="catbars" id="cat-share"></div></div></div>
+          <div class="card"><div class="card__head"><h3>Thống kê nhanh</h3></div>
+            <div class="card__body"><div class="stat-mini" id="cat-stats"></div></div></div>
+        </div>
+      </section>
+
+      <!-- ORDERS -->
+      <section class="ad__view" id="view-orders">
+        <div class="toolbar">
+          <input class="input" type="search" id="o-search" placeholder="Tìm mã đơn, khách hàng, SĐT..." style="min-width:260px">
+          <select class="select" id="o-status">
+            <option value="">Tất cả trạng thái</option>
+            <option value="pending">Chờ xác nhận</option>
+            <option value="confirmed">Đã xác nhận</option>
+            <option value="shipping">Đang giao</option>
+            <option value="completed">Hoàn thành</option>
+            <option value="cancelled">Đã huỷ</option>
+          </select>
+          <div class="toolbar__right"><span class="chip" id="o-count">0 đơn</span></div>
+        </div>
+        <div class="card"><div class="table-wrap" id="orders-table"></div></div>
+      </section>
+
+      <!-- SERVICES -->
+      <section class="ad__view" id="view-services">
+        <div class="toolbar">
+          <div class="toolbar__right">
+            <button class="btn btn--primary btn--sm" type="button" id="s-add">
+              <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Thêm dịch vụ
+            </button>
+          </div>
+        </div>
+        <div class="card"><div class="table-wrap" id="services-table"></div></div>
+      </section>
+
+      <!-- BOOKINGS -->
+      <section class="ad__view" id="view-bookings">
+        <div class="toolbar">
+          <select class="select" id="b-status">
+            <option value="">Tất cả trạng thái</option>
+            <option value="pending">Chờ xác nhận</option>
+            <option value="confirmed">Đã xác nhận</option>
+            <option value="done">Đã hoàn thành</option>
+            <option value="cancelled">Đã huỷ</option>
+          </select>
+          <div class="toolbar__right"><span class="chip" id="b-count">0 lịch hẹn</span></div>
+        </div>
+        <div class="card"><div class="table-wrap" id="bookings-table"></div></div>
+      </section>
+
+      <!-- CUSTOMERS -->
+      <section class="ad__view" id="view-customers">
+        <div class="toolbar">
+          <input class="input" type="search" id="u-search" placeholder="Tìm theo tên hoặc email..." style="min-width:240px">
+          <div class="toolbar__right"><span class="chip" id="u-count">0 tài khoản</span></div>
+        </div>
+        <div class="card"><div class="table-wrap" id="users-table"></div></div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="ad__view" id="view-settings">
+        <div class="ad-grid">
+          <div class="card">
+            <div class="card__head"><h3>Thông tin cửa hàng</h3></div>
+            <div class="card__body">
+              <form id="settings-form" novalidate>
+                <div class="field"><label for="st-name">Tên website</label><input class="input" id="st-name"></div>
+                <div class="form-row">
+                  <div class="field"><label for="st-hotline">Hotline</label><input class="input" id="st-hotline"></div>
+                  <div class="field"><label for="st-email">Email</label><input class="input" id="st-email" type="email"></div>
+                </div>
+                <div class="field"><label for="st-address">Địa chỉ</label><input class="input" id="st-address"></div>
+                <div class="field"><label for="st-hours">Giờ mở cửa</label><input class="input" id="st-hours"></div>
+                <button class="btn btn--primary" type="submit">Lưu cài đặt</button>
+              </form>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__head"><h3>Dữ liệu hệ thống</h3></div>
+            <div class="card__body">
+              <div class="hint-box" style="background:#fffbeb;border-color:#fde68a;color:#92400e">
+                <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+                <span>Toàn bộ dữ liệu được lưu trong <b>localStorage</b> của trình duyệt. Xoá dữ liệu website sẽ mất toàn bộ sản phẩm, đơn hàng và tài khoản đã tạo.</span>
+              </div>
+              <div class="stat-mini" id="data-stats" style="margin-bottom:16px"></div>
+              <div style="display:flex;gap:9px;flex-wrap:wrap">
+                <button class="btn btn--ghost btn--sm" type="button" id="export-data">Xuất dữ liệu (JSON)</button>
+                <button class="btn btn--danger btn--sm" type="button" id="reset-data">Khôi phục dữ liệu mẫu</button>
+              </div>
+              <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--ad-line);font-size:.8rem;color:#64748b;line-height:1.7">
+                <b style="color:#0a1120">Tài khoản quản trị mặc định</b><br>
+                Email: admin@azmobile.vn · Mật khẩu: admin123
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Sản phẩm -->
+<div class="modal" id="modal-product">
+  <div class="modal__box">
+    <div class="modal__head">
+      <h3 id="pm-title">Thêm sản phẩm</h3>
+      <button class="modal__close" type="button" data-close="modal-product">
+        <svg class="ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="product-form" novalidate>
+      <div class="modal__body">
+        <input type="hidden" id="pf-id">
+        <div class="field"><label for="pf-name2">Tên sản phẩm <span class="req">*</span></label>
+          <input class="input" id="pf-name2" placeholder="VD: ASUS ROG Strix G16">
+          <span class="field__err">Vui lòng nhập tên sản phẩm.</span></div>
+        <div class="form-row">
+          <div class="field"><label for="pf-cat">Danh mục <span class="req">*</span></label>
+            <select class="select" id="pf-cat"></select>
+            <span class="field__err">Vui lòng chọn danh mục.</span></div>
+          <div class="field"><label for="pf-brand">Thương hiệu</label>
+            <input class="input" id="pf-brand" placeholder="ASUS, Dell, Apple..."></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="pf-price">Giá bán (₫) <span class="req">*</span></label>
+            <input class="input" id="pf-price" type="number" min="0" step="100000" placeholder="29990000">
+            <span class="field__err">Giá bán phải lớn hơn 0.</span></div>
+          <div class="field"><label for="pf-old">Giá niêm yết (₫)</label>
+            <input class="input" id="pf-old" type="number" min="0" step="100000" placeholder="32990000">
+            <span class="field__hint">Để trống hoặc 0 nếu không giảm giá.</span></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="pf-stock">Tồn kho</label>
+            <input class="input" id="pf-stock" type="number" min="0" step="1" value="10"></div>
+          <div class="field"><label for="pf-rating">Đánh giá (0–5)</label>
+            <input class="input" id="pf-rating" type="number" min="0" max="5" step="0.1" value="4.5"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="pf-badge">Nhãn</label>
+            <input class="input" id="pf-badge" placeholder="Hot, Bán chạy, Giá tốt..."></div>
+          <div class="field"><label for="pf-color">Màu chủ đạo</label>
+            <input class="input" id="pf-color" type="color" value="#2563eb" style="padding:5px;height:44px"></div>
+        </div>
+
+        <div class="field" style="margin-bottom:8px"><label>Thông số kỹ thuật</label></div>
+        <div class="form-row">
+          <div class="field"><input class="input" id="pf-cpu" placeholder="CPU — Intel Core i7-13650HX"></div>
+          <div class="field"><input class="input" id="pf-ram" placeholder="RAM — 16GB DDR5"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><input class="input" id="pf-ssd" placeholder="Lưu trữ — 512GB NVMe"></div>
+          <div class="field"><input class="input" id="pf-vga" placeholder="Đồ hoạ — RTX 4060 8GB"></div>
+        </div>
+        <div class="field"><input class="input" id="pf-screen" placeholder="Màn hình — 16 inch FHD+ 165Hz"></div>
+
+        <div class="field"><label for="pf-desc">Mô tả sản phẩm</label>
+          <textarea class="textarea" id="pf-desc" placeholder="Mô tả ngắn gọn điểm nổi bật..."></textarea></div>
+
+        <label class="check"><input type="checkbox" id="pf-featured">
+          <span>Hiển thị ở mục <b>Sản phẩm nổi bật</b> trên trang chủ</span></label>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn--ghost" type="button" data-close="modal-product">Huỷ</button>
+        <button class="btn btn--primary" type="submit">Lưu sản phẩm</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Danh mục -->
+<div class="modal modal--sm" id="modal-category">
+  <div class="modal__box">
+    <div class="modal__head">
+      <h3>Thêm danh mục</h3>
+      <button class="modal__close" type="button" data-close="modal-category">
+        <svg class="ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="category-form" novalidate>
+      <div class="modal__body">
+        <div class="field"><label for="cf-name">Tên danh mục <span class="req">*</span></label>
+          <input class="input" id="cf-name" placeholder="VD: Laptop Doanh nghiệp">
+          <span class="field__err">Tên danh mục không được để trống.</span></div>
+        <div class="field"><label for="cf-desc">Mô tả</label>
+          <textarea class="textarea" id="cf-desc" placeholder="Mô tả ngắn về danh mục..."></textarea></div>
+        <div class="form-row">
+          <div class="field"><label for="cf-icon">Biểu tượng</label>
+            <select class="select" id="cf-icon">
+              <option value="laptop">Laptop</option>
+              <option value="gamepad">Gaming</option>
+              <option value="briefcase">Văn phòng</option>
+              <option value="palette">Đồ hoạ</option>
+              <option value="monitor">Màn hình</option>
+              <option value="mouse">Phụ kiện</option>
+              <option value="chip">Linh kiện</option>
+              <option value="box">Khác</option>
+            </select></div>
+          <div class="field"><label for="cf-color">Màu</label>
+            <input class="input" id="cf-color" type="color" value="#2563eb" style="padding:5px;height:44px"></div>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn--ghost" type="button" data-close="modal-category">Huỷ</button>
+        <button class="btn btn--primary" type="submit">Tạo danh mục</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Dịch vụ -->
+<div class="modal" id="modal-service">
+  <div class="modal__box">
+    <div class="modal__head">
+      <h3>Thêm dịch vụ</h3>
+      <button class="modal__close" type="button" data-close="modal-service">
+        <svg class="ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="service-form" novalidate>
+      <div class="modal__body">
+        <div class="field"><label for="sf-name">Tên dịch vụ <span class="req">*</span></label>
+          <input class="input" id="sf-name" placeholder="VD: Thay pin laptop">
+          <span class="field__err">Tên dịch vụ không được để trống.</span></div>
+        <div class="form-row">
+          <div class="field"><label for="sf-type">Loại</label>
+            <select class="select" id="sf-type">
+              <option value="repair">Sửa chữa</option>
+              <option value="warranty">Bảo hành</option>
+            </select></div>
+          <div class="field"><label for="sf-price">Giá từ (₫)</label>
+            <input class="input" id="sf-price" type="number" min="0" step="50000" value="250000"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="sf-duration">Thời gian</label>
+            <input class="input" id="sf-duration" placeholder="VD: 45 phút"></div>
+          <div class="field"><label for="sf-icon">Biểu tượng</label>
+            <select class="select" id="sf-icon">
+              <option value="wrench">Wrench</option>
+              <option value="fan">Quạt</option>
+              <option value="disk">Ổ cứng</option>
+              <option value="chip">Linh kiện</option>
+              <option value="monitor">Màn hình</option>
+              <option value="keyboard">Bàn phím</option>
+              <option value="shield">Bảo hành</option>
+              <option value="crown">VIP</option>
+              <option value="heart">Chăm sóc</option>
+            </select></div>
+        </div>
+        <div class="field"><label for="sf-desc">Mô tả</label>
+          <textarea class="textarea" id="sf-desc" placeholder="Mô tả chi tiết dịch vụ..."></textarea></div>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn--ghost" type="button" data-close="modal-service">Huỷ</button>
+        <button class="btn btn--primary" type="submit">Lưu dịch vụ</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Xác nhận xoá -->
+<div class="modal modal--sm" id="modal-confirm">
+  <div class="modal__box">
+    <div class="modal__head">
+      <h3>Xác nhận xoá</h3>
+      <button class="modal__close" type="button" data-close="modal-confirm">
+        <svg class="ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <p id="confirm-text" style="margin:0;font-size:.9rem;color:#475569"></p>
+    </div>
+    <div class="modal__foot">
+      <button class="btn btn--ghost" type="button" data-close="modal-confirm">Huỷ</button>
+      <button class="btn btn--danger" type="button" id="confirm-ok">Xoá</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-host" class="toast-host"></div>
+
+<script src="assets/js/db.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>

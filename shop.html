@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sản phẩm — AZmobile</title>
+  <meta name="description" content="Danh sách laptop gaming, văn phòng, đồ họa, màn hình, phụ kiện và linh kiện chính hãng tại AZmobile.">
+  <meta name="theme-color" content="#0a1120">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main>
+  <section class="page-head">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="index.html">Trang chủ</a>
+        <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        <span id="crumb-current">Sản phẩm</span>
+      </nav>
+      <h1 id="page-title">Tất cả sản phẩm</h1>
+      <p id="page-desc">Laptop, màn hình, phụ kiện và linh kiện — tất cả đều chính hãng, bảo hành đầy đủ.</p>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="shop-layout">
+      <!-- Bộ lọc -->
+      <aside class="filters" id="filters">
+        <div class="filters__head">
+          <strong>Bộ lọc</strong>
+          <button type="button" id="reset-filters">Xoá tất cả</button>
+        </div>
+
+        <div class="fgroup">
+          <h4>Danh mục</h4>
+          <ul id="f-cats"></ul>
+        </div>
+
+        <div class="fgroup">
+          <h4>Thương hiệu</h4>
+          <ul id="f-brands"></ul>
+        </div>
+
+        <div class="fgroup">
+          <h4>Khoảng giá</h4>
+          <div class="price-range">
+            <div class="row">
+              <input class="input" type="number" id="f-min" placeholder="Từ" min="0" step="100000">
+              <span>—</span>
+              <input class="input" type="number" id="f-max" placeholder="Đến" min="0" step="100000">
+            </div>
+            <button class="btn btn--ghost btn--sm btn--block" type="button" id="apply-price">Áp dụng</button>
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <h4>Khác</h4>
+          <ul>
+            <li class="fopt"><input type="checkbox" id="f-stock"> <label for="f-stock" style="cursor:pointer">Chỉ hiện còn hàng</label></li>
+            <li class="fopt"><input type="checkbox" id="f-sale"> <label for="f-sale" style="cursor:pointer">Đang giảm giá</label></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Danh sách -->
+      <div>
+        <div class="shop-bar">
+          <button class="btn btn--ghost btn--sm filter-toggle" type="button" id="open-filters">
+            <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 5h18M6 12h12M10 19h4"/></svg>
+            Bộ lọc
+          </button>
+          <span class="shop-bar__count">Tìm thấy <b id="result-count">0</b> sản phẩm</span>
+          <div class="shop-bar__right">
+            <select class="select" id="sort" aria-label="Sắp xếp">
+              <option value="popular">Phổ biến nhất</option>
+              <option value="new">Mới nhất</option>
+              <option value="price-asc">Giá thấp → cao</option>
+              <option value="price-desc">Giá cao → thấp</option>
+              <option value="rating">Đánh giá cao</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="active-chips" id="active-chips"></div>
+        <div class="prod-grid" id="shop-grid"></div>
+        <div id="shop-empty" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/db.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/shop.js"></script>
+</body>
+</html>

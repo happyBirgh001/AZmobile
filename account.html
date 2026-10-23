@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tài khoản của tôi — AZmobile</title>
+  <meta name="theme-color" content="#0a1120">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main>
+  <section class="page-head">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="index.html">Trang chủ</a>
+        <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        <span>Tài khoản</span>
+      </nav>
+      <h1>Tài khoản của tôi</h1>
+      <p>Quản lý thông tin cá nhân, đơn hàng và lịch hẹn dịch vụ.</p>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="acct-layout">
+      <aside class="acct-side">
+        <div class="acct-user">
+          <div class="acct-user__ava" id="acct-ava">A</div>
+          <b id="acct-name">—</b>
+          <small id="acct-email">—</small>
+        </div>
+        <nav class="acct-menu" id="acct-menu">
+          <button type="button" class="is-active" data-view="profile">
+            <svg class="ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+            Thông tin cá nhân
+          </button>
+          <button type="button" data-view="orders">
+            <svg class="ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-3-2V3Z"/><path d="M9 8h6M9 12h6"/></svg>
+            Đơn hàng của tôi
+          </button>
+          <button type="button" data-view="bookings">
+            <svg class="ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 1 0 5 5L21 21l-2 2-9.7-9.7a4 4 0 0 1-5-5L7 5l3 3 3-3-3-3 4.7 1.3Z"/></svg>
+            Lịch hẹn dịch vụ
+          </button>
+          <button type="button" id="acct-logout">
+            <svg class="ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+            Đăng xuất
+          </button>
+        </nav>
+        <a class="btn btn--ghost btn--block" href="admin.html" id="admin-link" style="margin-top:12px;display:none">
+          Vào trang quản trị
+        </a>
+      </aside>
+
+      <div id="acct-content"></div>
+    </div>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/db.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/account.js"></script>
+</body>
+</html>

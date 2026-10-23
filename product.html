@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết sản phẩm — AZmobile</title>
+  <meta name="theme-color" content="#0a1120">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main>
+  <div class="container">
+    <nav class="crumbs" style="padding-top:20px" aria-label="Breadcrumb">
+      <a href="index.html">Trang chủ</a>
+      <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      <a href="shop.html">Sản phẩm</a>
+      <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      <span id="crumb-name">…</span>
+    </nav>
+
+    <div id="pdp-root"></div>
+
+    <section class="section" style="padding-top:8px" id="related-section">
+      <div class="section-head">
+        <div class="section-head__text">
+          <span class="eyebrow">Gợi ý</span>
+          <h2>Sản phẩm tương tự</h2>
+        </div>
+      </div>
+      <div class="prod-grid" id="related-grid"></div>
+    </section>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/db.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/product.js"></script>
+</body>
+</html>

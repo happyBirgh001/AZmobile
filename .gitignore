@@ -1,0 +1,13 @@
+# Hệ điều hành
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Thư mục làm việc của công cụ hỗ trợ (không đưa lên web)
+.workbuddy-ai/
+_admin-boot.html
+
+# Trình soạn thảo
+.vscode/
+.idea/
+*.log
