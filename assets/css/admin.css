@@ -497,3 +497,6 @@ table.tb .muted { color: var(--muted); font-size: .8rem; }
   .modal__foot .btn { width: 100%; }
   .stat-mini { grid-template-columns: 1fr; }
 }
+
+/* Ảnh sản phẩm thật trong bảng quản trị */
+.tb__thumb .art--img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }

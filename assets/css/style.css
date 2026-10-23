@@ -1682,3 +1682,22 @@ button { cursor: pointer; }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   html { scroll-behavior: auto; }
 }
+
+/* ============================================================
+   Ảnh sản phẩm thật (assets/img/products)
+   ============================================================ */
+.art--img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center;
+  background: var(--bg-soft);
+}
+.pcard__media .art--img { transition: transform .45s var(--ease); }
+.pcard:hover .pcard__media .art--img { transform: scale(1.045); }
+.hero__card .art--img { aspect-ratio: 16 / 11; }
+.pdp__gallery .art--img { aspect-ratio: 16 / 11; }
+.split__media .art--img { border-radius: var(--r-xl); border: 1px solid var(--line); }
+.citem__img .art--img { aspect-ratio: 1 / 1; }
+.order-line__thumb .art--img { width: 100%; height: 100%; aspect-ratio: auto; }

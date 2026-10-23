@@ -238,6 +238,7 @@
     document.getElementById('pf-rating').value = p ? p.rating : 4.5;
     document.getElementById('pf-badge').value = p ? p.badge : '';
     document.getElementById('pf-color').value = p ? p.artColor : '#2563eb';
+    document.getElementById('pf-image').value = p ? (p.image || '') : '';
     document.getElementById('pf-cpu').value = p ? p.specs.cpu : '';
     document.getElementById('pf-ram').value = p ? p.specs.ram : '';
     document.getElementById('pf-ssd').value = p ? p.specs.ssd : '';
@@ -308,6 +309,7 @@
       rating: document.getElementById('pf-rating').value,
       badge: document.getElementById('pf-badge').value,
       artColor: document.getElementById('pf-color').value,
+      image: document.getElementById('pf-image').value,
       featured: document.getElementById('pf-featured').checked,
       description: document.getElementById('pf-desc').value,
       specs: {

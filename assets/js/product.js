@@ -40,13 +40,14 @@
     '<div class="pdp">' +
       '<div>' +
         '<div class="pdp__gallery">' +
-          '<div id="pdp-art">' + U.productArt(p) + '</div>' +
-          '<div class="pdp__thumbs" id="pdp-thumbs">' +
-            '<span class="is-active">' + U.icon('laptop', 20) + '</span>' +
-            '<span>' + U.icon('grid', 20) + '</span>' +
-            '<span>' + U.icon('shield', 20) + '</span>' +
-            '<span>' + U.icon('box', 20) + '</span>' +
-          '</div>' +
+          '<div id="pdp-art">' + U.productArt(p, { eager: true }) + '</div>' +
+          (p.image ? '' :
+            '<div class="pdp__thumbs" id="pdp-thumbs">' +
+              '<span class="is-active">' + U.icon('laptop', 20) + '</span>' +
+              '<span>' + U.icon('grid', 20) + '</span>' +
+              '<span>' + U.icon('shield', 20) + '</span>' +
+              '<span>' + U.icon('box', 20) + '</span>' +
+            '</div>') +
         '</div>' +
       '</div>' +
 
@@ -181,7 +182,8 @@
   });
 
   /* --- Thumbnail (chỉ đổi trạng thái) --- */
-  document.getElementById('pdp-thumbs').addEventListener('click', function (e) {
+  var thumbsEl = document.getElementById('pdp-thumbs');
+  if (thumbsEl) thumbsEl.addEventListener('click', function (e) {
     var s = e.target.closest('span');
     if (!s) return;
     this.querySelectorAll('span').forEach(function (x) { x.classList.remove('is-active'); });

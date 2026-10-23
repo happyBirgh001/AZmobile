@@ -71,7 +71,9 @@ azmobile/
 │   │   ├── account.js  Trang tài khoản
 │   │   └── admin.js    Dashboard quản trị
 │   └── img/
-│       └── favicon.svg
+│       ├── favicon.svg
+│       ├── no-image.svg         Ảnh thay thế khi đường dẫn ảnh bị lỗi
+│       └── products/            Ảnh 39 sản phẩm (<id>.jpg) + CREDITS.md
 ├── .nojekyll           Giúp GitHub Pages phục vụ file bắt đầu bằng "_"
 ├── .gitignore
 └── README.md
@@ -94,7 +96,9 @@ python -m http.server 8000
 npx serve .
 ```
 
-> Lần đầu mở, hệ thống tự tạo dữ liệu mẫu: 6 danh mục, 16 sản phẩm, 8 dịch vụ, 6 đơn hàng, 2 lịch hẹn và 2 tài khoản.
+> Lần đầu mở, hệ thống tự tạo dữ liệu mẫu: 6 danh mục, **39 sản phẩm**, 8 dịch vụ, 6 đơn hàng, 2 lịch hẹn và 2 tài khoản.
+>
+> Nếu trình duyệt đã có dữ liệu cũ, hệ thống tự **bổ sung sản phẩm mới** (theo `SEED_VERSION` trong `db.js`) mà **không xoá** đơn hàng, tài khoản hay sản phẩm bạn tự thêm.
 
 ---
 
@@ -168,6 +172,7 @@ Sao lưu dữ liệu: vào **Admin → Cài đặt → Xuất dữ liệu (JSON)
 | Số sản phẩm mỗi trang chủ | `assets/js/home.js` → `.slice(0, 8)` |
 | Phí ship / ngưỡng miễn phí | `assets/js/db.js` → `createOrder` (biến `ship`) |
 | Logo, favicon | `assets/img/favicon.svg` và hàm `logoMark()` trong `ui.js` |
+| Ảnh sản phẩm | Thay tệp trong `assets/img/products/` (giữ nguyên tên `<id>.jpg`), hoặc nhập đường dẫn ảnh ở Admin → Sản phẩm → **Ảnh sản phẩm** |
 
 ---
 

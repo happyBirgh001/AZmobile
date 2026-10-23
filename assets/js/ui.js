@@ -104,6 +104,14 @@
 
   function productArt(p, opts) {
     opts = opts || {};
+
+    // Có ảnh thật -> dùng ảnh; không có thì vẽ minh hoạ SVG
+    if (p.image) {
+      return '<img class="art art--img ' + (opts.cls || '') + '" src="' + esc(p.image) + '"' +
+        ' alt="' + esc(p.name) + '" loading="' + (opts.eager ? 'eager' : 'lazy') + '" decoding="async"' +
+        ' onerror="this.onerror=null;this.src=\'assets/img/no-image.svg\'">';
+    }
+
     var c = p.artColor || '#2563eb';
     var kind = artKind(p.categoryId);
     var gid = 'g' + Math.random().toString(36).slice(2, 8);

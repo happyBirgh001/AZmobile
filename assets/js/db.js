@@ -8,6 +8,9 @@
 
   var DB_KEY = 'azmobile.db.v2';
   var SESSION_KEY = 'azmobile.session.v2';
+  // Tăng số này mỗi khi thêm sản phẩm/danh mục mẫu mới.
+  // Dữ liệu cũ trong localStorage sẽ được BỔ SUNG mục mới, không bị xoá.
+  var SEED_VERSION = 3;
 
   /* ---------------- Tiện ích ---------------- */
   function uid(prefix) {
@@ -49,6 +52,7 @@
         id: 'p_rog', name: 'ASUS ROG Strix G16 (2024)', categoryId: 'cat_gaming', brand: 'ASUS',
         price: 32990000, oldPrice: 36990000, stock: 8, rating: 4.8, sold: 124, featured: true,
         artColor: '#6366f1', badge: 'Hot',
+        image: 'assets/img/products/p_rog.jpg',
         specs: { cpu: 'Intel Core i7-13650HX', ram: '16GB DDR5 4800MHz', ssd: '512GB PCIe 4.0', vga: 'RTX 4060 8GB', screen: '16" FHD+ 165Hz' },
         description: 'Chiến mọi tựa game AAA với RTX 4060 và màn hình 165Hz. Hệ thống tản nhiệt buồng hơi kép giữ máy luôn mát trong các trận đấu dài.'
       },
@@ -56,6 +60,7 @@
         id: 'p_nitro', name: 'Acer Nitro V15', categoryId: 'cat_gaming', brand: 'Acer',
         price: 21490000, oldPrice: 23990000, stock: 14, rating: 4.6, sold: 210, featured: true,
         artColor: '#f43f5e', badge: 'Giá tốt',
+        image: 'assets/img/products/p_nitro.jpg',
         specs: { cpu: 'Intel Core i5-13420H', ram: '16GB DDR5', ssd: '512GB NVMe', vga: 'RTX 4050 6GB', screen: '15.6" FHD 144Hz' },
         description: 'Lựa chọn gaming quốc dân trong tầm giá 20 triệu. Hiệu năng ổn định, nâng cấp RAM và SSD dễ dàng.'
       },
@@ -63,6 +68,7 @@
         id: 'p_loq', name: 'Lenovo LOQ 15IRX9', categoryId: 'cat_gaming', brand: 'Lenovo',
         price: 24990000, oldPrice: 27490000, stock: 9, rating: 4.5, sold: 96, featured: false,
         artColor: '#0ea5e9', badge: '',
+        image: 'assets/img/products/p_loq.jpg',
         specs: { cpu: 'Intel Core i5-13450HX', ram: '16GB DDR5', ssd: '512GB NVMe', vga: 'RTX 4050 6GB', screen: '15.6" FHD 144Hz' },
         description: 'Thiết kế tối giản, hiệu năng cao, phù hợp cả học tập và giải trí. Bàn phím full-size có numpad.'
       },
@@ -70,6 +76,7 @@
         id: 'p_macair', name: 'MacBook Air 13 M3', categoryId: 'cat_office', brand: 'Apple',
         price: 27990000, oldPrice: 29990000, stock: 12, rating: 4.9, sold: 305, featured: true,
         artColor: '#94a3b8', badge: 'Bán chạy',
+        image: 'assets/img/products/p_macair.jpg',
         specs: { cpu: 'Apple M3 8-core', ram: '8GB Unified', ssd: '256GB SSD', vga: 'GPU 10-core', screen: '13.6" Liquid Retina' },
         description: 'Mỏng nhẹ 1.24kg, pin tới 18 giờ, hoàn toàn không quạt nên tuyệt đối yên tĩnh. Chuẩn mực laptop văn phòng.'
       },
@@ -77,6 +84,7 @@
         id: 'p_xps', name: 'Dell XPS 13 9340', categoryId: 'cat_office', brand: 'Dell',
         price: 38990000, oldPrice: 42990000, stock: 5, rating: 4.7, sold: 64, featured: true,
         artColor: '#64748b', badge: 'Cao cấp',
+        image: 'assets/img/products/p_xps.jpg',
         specs: { cpu: 'Intel Core Ultra 7 155H', ram: '16GB LPDDR5x', ssd: '512GB NVMe', vga: 'Intel Arc', screen: '13.4" FHD+ IPS' },
         description: 'Khung máy nhôm CNC nguyên khối, viền màn hình siêu mỏng, cảm giác cầm nắm đẳng cấp.'
       },
@@ -84,6 +92,7 @@
         id: 'p_thinkpad', name: 'Lenovo ThinkPad X1 Carbon Gen 12', categoryId: 'cat_office', brand: 'Lenovo',
         price: 41990000, oldPrice: 0, stock: 4, rating: 4.8, sold: 41, featured: false,
         artColor: '#1e293b', badge: '',
+        image: 'assets/img/products/p_thinkpad.jpg',
         specs: { cpu: 'Intel Core Ultra 7 165U', ram: '32GB LPDDR5x', ssd: '1TB NVMe', vga: 'Intel Graphics', screen: '14" WUXGA' },
         description: 'Bàn phím tốt nhất phân khúc, độ bền chuẩn quân đội, bảo mật vân tay và camera hồng ngoại.'
       },
@@ -91,6 +100,7 @@
         id: 'p_macpro', name: 'MacBook Pro 14 M3 Pro', categoryId: 'cat_graphic', brand: 'Apple',
         price: 52990000, oldPrice: 56990000, stock: 6, rating: 4.9, sold: 88, featured: true,
         artColor: '#8b5cf6', badge: 'Pro',
+        image: 'assets/img/products/p_macpro.jpg',
         specs: { cpu: 'Apple M3 Pro 11-core', ram: '18GB Unified', ssd: '512GB SSD', vga: 'GPU 14-core', screen: '14.2" Liquid Retina XDR' },
         description: 'Màn hình XDR 1600 nits, dựng phim 4K mượt mà, cổng HDMI và khe SD tiện dụng cho nhà sáng tạo.'
       },
@@ -98,6 +108,7 @@
         id: 'p_zenbook', name: 'ASUS Zenbook 14 OLED', categoryId: 'cat_graphic', brand: 'ASUS',
         price: 26490000, oldPrice: 28990000, stock: 10, rating: 4.6, sold: 132, featured: false,
         artColor: '#14b8a6', badge: '',
+        image: 'assets/img/products/p_zenbook.jpg',
         specs: { cpu: 'Intel Core Ultra 5 125H', ram: '16GB LPDDR5x', ssd: '512GB NVMe', vga: 'Intel Arc', screen: '14" 3K OLED 120Hz' },
         description: 'Màn hình OLED 3K rực rỡ, đạt 100% DCI-P3 — lựa chọn tuyệt vời cho thiết kế đồ họa tầm trung.'
       },
@@ -105,6 +116,7 @@
         id: 'p_katana', name: 'MSI Katana 15 B13V', categoryId: 'cat_gaming', brand: 'MSI',
         price: 22990000, oldPrice: 25490000, stock: 11, rating: 4.4, sold: 78, featured: false,
         artColor: '#ef4444', badge: '',
+        image: 'assets/img/products/p_katana.jpg',
         specs: { cpu: 'Intel Core i7-13620H', ram: '16GB DDR5', ssd: '512GB NVMe', vga: 'RTX 4060 8GB', screen: '15.6" FHD 144Hz' },
         description: 'RTX 4060 trong tầm giá 23 triệu, tản nhiệt Cooler Boost 5 với 2 quạt và 6 ống đồng.'
       },
@@ -112,6 +124,7 @@
         id: 'p_u2723', name: 'Dell UltraSharp U2723QE 27" 4K', categoryId: 'cat_monitor', brand: 'Dell',
         price: 13990000, oldPrice: 15990000, stock: 7, rating: 4.8, sold: 57, featured: true,
         artColor: '#0ea5e9', badge: '',
+        image: 'assets/img/products/p_u2723.jpg',
         specs: { cpu: '—', ram: '—', ssd: '—', vga: 'IPS Black', screen: '27" 4K 60Hz, 98% DCI-P3' },
         description: 'Tấm nền IPS Black cho độ tương phản 2000:1, tích hợp hub USB-C 90W — chuẩn màn hình cho designer.'
       },
@@ -119,6 +132,7 @@
         id: 'p_mxmaster', name: 'Logitech MX Master 3S', categoryId: 'cat_acc', brand: 'Logitech',
         price: 2490000, oldPrice: 2990000, stock: 25, rating: 4.9, sold: 412, featured: true,
         artColor: '#f59e0b', badge: 'Bán chạy',
+        image: 'assets/img/products/p_mxmaster.jpg',
         specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Chuột không dây 8000 DPI' },
         description: 'Cảm biến 8000 DPI, cuộn MagSpeed siêu nhanh, kết nối 3 thiết bị. Chuột dành cho người làm việc chuyên nghiệp.'
       },
@@ -126,6 +140,7 @@
         id: 'p_keychron', name: 'Keychron K8 Pro (Hot-swap)', categoryId: 'cat_acc', brand: 'Keychron',
         price: 2190000, oldPrice: 0, stock: 18, rating: 4.7, sold: 165, featured: false,
         artColor: '#8b5cf6', badge: '',
+        image: 'assets/img/products/p_keychron.jpg',
         specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Bàn phím cơ TKL không dây' },
         description: 'Layout TKL, hot-swap thay switch không cần hàn, kết nối Bluetooth 5.1 và USB-C.'
       },
@@ -133,6 +148,7 @@
         id: 'p_xm5', name: 'Sony WH-1000XM5', categoryId: 'cat_acc', brand: 'Sony',
         price: 6490000, oldPrice: 7990000, stock: 9, rating: 4.8, sold: 143, featured: false,
         artColor: '#334155', badge: 'Giảm giá',
+        image: 'assets/img/products/p_xm5.jpg',
         specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Tai nghe chống ồn 30h pin' },
         description: 'Chống ồn chủ động hàng đầu, 8 micro, pin 30 giờ. Bạn đồng hành cho những chuyến bay dài.'
       },
@@ -140,6 +156,7 @@
         id: 'p_990pro', name: 'Samsung 990 PRO 1TB NVMe', categoryId: 'cat_part', brand: 'Samsung',
         price: 2790000, oldPrice: 3290000, stock: 30, rating: 4.9, sold: 268, featured: false,
         artColor: '#22c55e', badge: '',
+        image: 'assets/img/products/p_990pro.jpg',
         specs: { cpu: '—', ram: '—', ssd: '1TB PCIe 4.0, 7450MB/s', vga: '—', screen: '—' },
         description: 'Tốc độ đọc 7450MB/s, bảo hành 5 năm chính hãng. Nâng cấp ổ cứng nhanh nhất cho laptop của bạn.'
       },
@@ -147,6 +164,7 @@
         id: 'p_anker', name: 'Anker 737 Power Bank 24000mAh 140W', categoryId: 'cat_acc', brand: 'Anker',
         price: 3290000, oldPrice: 3790000, stock: 16, rating: 4.7, sold: 91, featured: false,
         artColor: '#06b6d4', badge: '',
+        image: 'assets/img/products/p_anker.jpg',
         specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Pin dự phòng 140W, màn hình LCD' },
         description: 'Sạc được cả MacBook Pro 14 ở công suất 140W, màn hình hiển thị công suất thời gian thực.'
       },
@@ -154,8 +172,205 @@
         id: 'p_ram', name: 'Kingston Fury 16GB DDR5 5600', categoryId: 'cat_part', brand: 'Kingston',
         price: 1590000, oldPrice: 1890000, stock: 40, rating: 4.6, sold: 187, featured: false,
         artColor: '#f97316', badge: '',
+        image: 'assets/img/products/p_ram.jpg',
         specs: { cpu: '—', ram: '16GB DDR5 5600MHz SO-DIMM', ssd: '—', vga: '—', screen: '—' },
         description: 'Nâng cấp RAM cho laptop gaming và workstation. Tương thích DDR5 SO-DIMM, bảo hành 3 năm.'
+      },
+
+      /* ---------- Bổ sung 2026: Laptop gaming ---------- */
+      {
+        id: 'p_helios', name: 'Acer Predator Helios Neo 16', categoryId: 'cat_gaming', brand: 'Acer',
+        price: 38990000, oldPrice: 42990000, stock: 7, rating: 4.8, sold: 58, featured: true,
+        artColor: '#6366f1', badge: 'Mới',
+        image: 'assets/img/products/p_helios.jpg',
+        specs: { cpu: 'Intel Core i7-14700HX', ram: '16GB DDR5 5600MHz', ssd: '1TB PCIe 4.0', vga: 'RTX 4060 8GB', screen: '16" WQXGA 165Hz' },
+        description: 'Màn hình 2.5K 165Hz phủ 100% sRGB, tản nhiệt AeroBlade 3D thế hệ 5 với hai quạt kim loại mỏng 0.08mm.'
+      },
+      {
+        id: 'p_victus', name: 'HP Victus 16 (16-r0078TX)', categoryId: 'cat_gaming', brand: 'HP',
+        price: 23490000, oldPrice: 25990000, stock: 18, rating: 4.4, sold: 176, featured: false,
+        artColor: '#0ea5e9', badge: 'Giá tốt',
+        image: 'assets/img/products/p_victus.jpg',
+        specs: { cpu: 'Intel Core i7-13620H', ram: '16GB DDR5 5200MHz', ssd: '512GB NVMe', vga: 'RTX 4050 6GB', screen: '16.1" FHD 144Hz' },
+        description: 'Bàn phím full-size có numpad, tản nhiệt 4 ống đồng. Cân bằng tốt giữa hiệu năng và giá thành cho sinh viên.'
+      },
+      {
+        id: 'p_aorus', name: 'Gigabyte AORUS 15X (BXF)', categoryId: 'cat_gaming', brand: 'Gigabyte',
+        price: 45990000, oldPrice: 49990000, stock: 3, rating: 4.7, sold: 27, featured: false,
+        artColor: '#f43f5e', badge: 'Cao cấp',
+        image: 'assets/img/products/p_aorus.jpg',
+        specs: { cpu: 'Intel Core i7-13700HX', ram: '16GB DDR5 4800MHz', ssd: '1TB PCIe 4.0', vga: 'RTX 4070 8GB', screen: '15.6" QHD 165Hz' },
+        description: 'RTX 4070 full power 140W, màn hình QHD 165Hz chuẩn màu, hỗ trợ MUX Switch chuyển chế độ GPU trực tiếp.'
+      },
+      {
+        id: 'p_g15', name: 'Dell G15 5530', categoryId: 'cat_gaming', brand: 'Dell',
+        price: 26990000, oldPrice: 29490000, stock: 11, rating: 4.5, sold: 143, featured: false,
+        artColor: '#22c55e', badge: '',
+        image: 'assets/img/products/p_g15.jpg',
+        specs: { cpu: 'Intel Core i7-13650HX', ram: '16GB DDR5 4800MHz', ssd: '512GB NVMe', vga: 'RTX 4050 6GB', screen: '15.6" FHD 120Hz' },
+        description: 'Thiết kế Alienware-inspired, hệ thống tản nhiệt buồng hơi kép, bảo hành chính hãng 24 tháng.'
+      },
+
+      /* ---------- Bổ sung 2026: Laptop văn phòng ---------- */
+      {
+        id: 'p_pavilion', name: 'HP Pavilion 15 (eg2045TU)', categoryId: 'cat_office', brand: 'HP',
+        price: 15990000, oldPrice: 17490000, stock: 22, rating: 4.3, sold: 264, featured: false,
+        artColor: '#0ea5e9', badge: 'Bán chạy',
+        image: 'assets/img/products/p_pavilion.jpg',
+        specs: { cpu: 'Intel Core i5-1235U', ram: '16GB DDR4 3200MHz', ssd: '512GB NVMe', vga: 'Intel Iris Xe', screen: '15.6" FHD IPS' },
+        description: 'Vỏ nhôm sang trọng, bàn phím có đèn nền, pin 41Wh dùng thoải mái một ngày làm việc.'
+      },
+      {
+        id: 'p_vivobook', name: 'ASUS Vivobook 15 OLED (A1505VA)', categoryId: 'cat_office', brand: 'ASUS',
+        price: 18490000, oldPrice: 20490000, stock: 15, rating: 4.6, sold: 198, featured: true,
+        artColor: '#14b8a6', badge: 'OLED',
+        image: 'assets/img/products/p_vivobook.jpg',
+        specs: { cpu: 'Intel Core i5-13500H', ram: '16GB DDR4 3200MHz', ssd: '512GB NVMe', vga: 'Intel Iris Xe', screen: '15.6" FHD OLED' },
+        description: 'Màn hình OLED 600 nits chuẩn màu Pantone, bản lề 180 độ, bàn phím êm phù hợp gõ văn bản dài.'
+      },
+      {
+        id: 'p_aspire', name: 'Acer Aspire 3 (A315-59)', categoryId: 'cat_office', brand: 'Acer',
+        price: 11290000, oldPrice: 12990000, stock: 30, rating: 4.2, sold: 412, featured: false,
+        artColor: '#f59e0b', badge: 'Rẻ nhất',
+        image: 'assets/img/products/p_aspire.jpg',
+        specs: { cpu: 'Intel Core i3-1215U', ram: '8GB DDR4 3200MHz', ssd: '256GB NVMe', vga: 'Intel UHD', screen: '15.6" FHD' },
+        description: 'Lựa chọn tiết kiệm cho học sinh – sinh viên: đủ dùng Office, học online, giải trí nhẹ. Dễ nâng cấp RAM và SSD.'
+      },
+      {
+        id: 'p_surface', name: 'Microsoft Surface Laptop 7 (13.8")', categoryId: 'cat_office', brand: 'Microsoft',
+        price: 34990000, oldPrice: 37990000, stock: 6, rating: 4.7, sold: 73, featured: true,
+        artColor: '#64748b', badge: 'Mỏng nhẹ',
+        image: 'assets/img/products/p_surface.jpg',
+        specs: { cpu: 'Snapdragon X Elite', ram: '16GB LPDDR5x', ssd: '512GB NVMe', vga: 'Adreno GPU', screen: '13.8" PixelSense 120Hz' },
+        description: 'Màn hình cảm ứng 120Hz, pin lên tới 20 giờ, hoàn toàn không quạt. Bản lề mở bằng một tay rất chắc chắn.'
+      },
+
+      /* ---------- Bổ sung 2026: Laptop đồ họa ---------- */
+      {
+        id: 'p_creator', name: 'MSI Creator Z16 HX Studio', categoryId: 'cat_graphic', brand: 'MSI',
+        price: 62990000, oldPrice: 68990000, stock: 2, rating: 4.8, sold: 19, featured: false,
+        artColor: '#8b5cf6', badge: 'Workstation',
+        image: 'assets/img/products/p_creator.jpg',
+        specs: { cpu: 'Intel Core i9-13980HX', ram: '32GB DDR5 5600MHz', ssd: '1TB PCIe 4.0', vga: 'RTX 4070 8GB', screen: '16" QHD+ 120Hz' },
+        description: 'Chuẩn màu 100% DCI-P3 đã hiệu chuẩn từ nhà máy, kèm bút cảm ứng MSI Pen 2. Dành cho dựng phim và 3D chuyên nghiệp.'
+      },
+      {
+        id: 'p_proart', name: 'ASUS ProArt Studiobook 16 OLED', categoryId: 'cat_graphic', brand: 'ASUS',
+        price: 47990000, oldPrice: 52990000, stock: 4, rating: 4.7, sold: 34, featured: true,
+        artColor: '#f43f5e', badge: 'Đồ họa',
+        image: 'assets/img/products/p_proart.jpg',
+        specs: { cpu: 'Intel Core i9-13980HX', ram: '32GB DDR5', ssd: '1TB PCIe 4.0', vga: 'RTX 4070 8GB', screen: '16" 3.2K OLED 120Hz' },
+        description: 'Núm xoay ASUS Dial vật lý điều khiển trực tiếp Photoshop, màn hình OLED 3.2K chuẩn màu Delta-E < 1.'
+      },
+
+      /* ---------- Bổ sung 2026: Màn hình ---------- */
+      {
+        id: 'p_ultragear', name: 'LG UltraGear 27GP850-B', categoryId: 'cat_monitor', brand: 'LG',
+        price: 8990000, oldPrice: 10490000, stock: 12, rating: 4.8, sold: 96, featured: true,
+        artColor: '#f43f5e', badge: 'Gaming',
+        image: 'assets/img/products/p_ultragear.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: '27" QHD Nano IPS 165Hz 1ms' },
+        description: 'Tấm nền Nano IPS phủ 98% DCI-P3, tương thích G-Sync & FreeSync Premium. Chân đế xoay dọc, nâng hạ linh hoạt.'
+      },
+      {
+        id: 'p_odyssey', name: 'Samsung Odyssey G5 27" (G55C)', categoryId: 'cat_monitor', brand: 'Samsung',
+        price: 6290000, oldPrice: 7490000, stock: 16, rating: 4.5, sold: 187, featured: false,
+        artColor: '#0ea5e9', badge: '',
+        image: 'assets/img/products/p_odyssey.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: '27" QHD VA cong 1000R 165Hz' },
+        description: 'Màn hình cong 1000R ôm tầm mắt, độ tương phản 2500:1 cho màu đen sâu, hỗ trợ HDR10.'
+      },
+      {
+        id: 'p_pa278qv', name: 'ASUS ProArt PA278QV 27"', categoryId: 'cat_monitor', brand: 'ASUS',
+        price: 7490000, oldPrice: 8290000, stock: 9, rating: 4.7, sold: 61, featured: false,
+        artColor: '#14b8a6', badge: 'Chuẩn màu',
+        image: 'assets/img/products/p_pa278qv.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: '27" WQHD IPS 75Hz 100% sRGB' },
+        description: 'Hiệu chuẩn Delta-E < 2, phủ 100% sRGB và Rec.709. Có cổng USB hub và chân đế xoay dọc cho dân thiết kế.'
+      },
+
+      /* ---------- Bổ sung 2026: Phụ kiện ---------- */
+      {
+        id: 'p_g502', name: 'Logitech G502 X Plus', categoryId: 'cat_acc', brand: 'Logitech',
+        price: 3290000, oldPrice: 3690000, stock: 20, rating: 4.8, sold: 154, featured: true,
+        artColor: '#6366f1', badge: 'Hot',
+        image: 'assets/img/products/p_g502.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Chuột không dây, cảm biến HERO 25K' },
+        description: 'Cảm biến HERO 25K, switch lai quang-cơ, đèn RGB LIGHTSYNC. Pin dùng liên tục 120 giờ khi tắt đèn.'
+      },
+      {
+        id: 'p_blackwidow', name: 'Razer BlackWidow V4 Pro', categoryId: 'cat_acc', brand: 'Razer',
+        price: 4490000, oldPrice: 4990000, stock: 10, rating: 4.6, sold: 88, featured: false,
+        artColor: '#22c55e', badge: '',
+        image: 'assets/img/products/p_blackwidow.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Bàn phím cơ full-size, switch Green' },
+        description: 'Núm xoay đa năng, 8 phím macro, kê tay nam châm có đèn nền. Switch Razer Green gõ giòn, bền 80 triệu lần nhấn.'
+      },
+      {
+        id: 'p_airpods', name: 'Apple AirPods Pro 2 (USB-C)', categoryId: 'cat_acc', brand: 'Apple',
+        price: 5490000, oldPrice: 6190000, stock: 25, rating: 4.9, sold: 327, featured: true,
+        artColor: '#94a3b8', badge: 'Bán chạy',
+        image: 'assets/img/products/p_airpods.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Tai nghe TWS, chống ồn chủ động' },
+        description: 'Chip H2, chống ồn chủ động gấp đôi thế hệ trước, xuyên âm thích ứng, chống nước IP54. Hộp sạc USB-C.'
+      },
+      {
+        id: 'p_jbl', name: 'JBL Tune 770NC', categoryId: 'cat_acc', brand: 'JBL',
+        price: 2190000, oldPrice: 2590000, stock: 28, rating: 4.5, sold: 213, featured: false,
+        artColor: '#f59e0b', badge: '',
+        image: 'assets/img/products/p_jbl.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Tai nghe over-ear, chống ồn chủ động' },
+        description: 'Pin 70 giờ, sạc nhanh 5 phút dùng 3 giờ. Âm bass JBL Pure Bass đặc trưng, gập gọn tiện mang theo.'
+      },
+      {
+        id: 'p_charger', name: 'Anker 67W GaN 3 cổng', categoryId: 'cat_acc', brand: 'Anker',
+        price: 890000, oldPrice: 1090000, stock: 45, rating: 4.7, sold: 386, featured: false,
+        artColor: '#06b6d4', badge: 'Nhỏ gọn',
+        image: 'assets/img/products/p_charger.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Củ sạc GaN 67W, 2×USB-C + 1×USB-A' },
+        description: 'Công nghệ GaN II nhỏ hơn 40% so với sạc thường. Sạc được laptop, điện thoại và tai nghe cùng lúc.'
+      },
+      {
+        id: 'p_stand', name: 'Đế tản nhiệt laptop 6 quạt RGB', categoryId: 'cat_acc', brand: 'CoolCold',
+        price: 450000, oldPrice: 590000, stock: 60, rating: 4.3, sold: 512, featured: false,
+        artColor: '#8b5cf6', badge: '',
+        image: 'assets/img/products/p_stand.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Đế tản nhiệt 6 quạt, 5 mức độ cao' },
+        description: '6 quạt gió 70mm, đèn LED RGB, 5 nấc điều chỉnh độ cao. Phù hợp laptop 14" – 17.3", giảm 5–8°C khi chơi game.'
+      },
+
+      /* ---------- Bổ sung 2026: Linh kiện ---------- */
+      {
+        id: 'p_sn850x', name: 'WD Black SN850X 2TB', categoryId: 'cat_part', brand: 'Western Digital',
+        price: 4290000, oldPrice: 4890000, stock: 14, rating: 4.9, sold: 142, featured: true,
+        artColor: '#1e293b', badge: 'Tốc độ cao',
+        image: 'assets/img/products/p_sn850x.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '2TB PCIe 4.0 NVMe, 7300MB/s', vga: '—', screen: '—' },
+        description: 'Đọc tuần tự 7300MB/s, chuẩn PCIe 4.0, tản nhiệt tích hợp. Chuẩn mực SSD cho máy trạm và PS5.'
+      },
+      {
+        id: 'p_crucial', name: 'Crucial P3 Plus 1TB', categoryId: 'cat_part', brand: 'Crucial',
+        price: 1590000, oldPrice: 1890000, stock: 35, rating: 4.6, sold: 298, featured: false,
+        artColor: '#0ea5e9', badge: 'Giá tốt',
+        image: 'assets/img/products/p_crucial.jpg',
+        specs: { cpu: '—', ram: '—', ssd: '1TB PCIe 4.0 NVMe, 5000MB/s', vga: '—', screen: '—' },
+        description: 'Hiệu năng PCIe 4.0 với mức giá phổ thông, bảo hành 5 năm. Nâng cấp dễ dàng cho mọi laptop có khe M.2.'
+      },
+      {
+        id: 'p_vengeance', name: 'Corsair Vengeance 32GB DDR5 6000', categoryId: 'cat_part', brand: 'Corsair',
+        price: 2890000, oldPrice: 3290000, stock: 18, rating: 4.7, sold: 117, featured: false,
+        artColor: '#f97316', badge: '',
+        image: 'assets/img/products/p_vengeance.jpg',
+        specs: { cpu: '—', ram: '32GB (2×16GB) DDR5 6000MHz', ssd: '—', vga: '—', screen: '—' },
+        description: 'Kit 2 thanh, hỗ trợ Intel XMP 3.0 và AMD EXPO. Tản nhiệt nhôm thấp, không vướng tản nhiệt CPU.'
+      },
+      {
+        id: 'p_kryonaut', name: 'Thermal Grizzly Kryonaut 1g', categoryId: 'cat_part', brand: 'Thermal Grizzly',
+        price: 320000, oldPrice: 390000, stock: 80, rating: 4.8, sold: 74, featured: false,
+        artColor: '#8b5cf6', badge: '',
+        image: '',
+        specs: { cpu: '—', ram: '—', ssd: '—', vga: '—', screen: 'Keo tản nhiệt, 12.5 W/mK' },
+        description: 'Độ dẫn nhiệt 12.5 W/mK, không dẫn điện nên an toàn tuyệt đối. Tuýp 1g dùng được 4–6 lần tra cho laptop.'
       }
     ];
 
@@ -224,6 +439,7 @@
 
     return {
       version: 2,
+      seedVersion: SEED_VERSION,
       users: users,
       categories: categories,
       products: products,
@@ -268,6 +484,36 @@
     }
   }
 
+  /* Bổ sung danh mục / sản phẩm mẫu mới vào dữ liệu đã có (giữ nguyên đơn hàng, user…) */
+  function migrateSeed() {
+    if (!state) return;
+    if (state.seedVersion === SEED_VERSION) return;
+    var base = seedData();
+    var added = 0;
+
+    (base.categories || []).forEach(function (c) {
+      if (!state.categories.some(function (x) { return x.id === c.id; })) {
+        state.categories.push(c);
+        added++;
+      }
+    });
+    (base.products || []).forEach(function (p) {
+      if (!state.products.some(function (x) { return x.id === p.id; })) {
+        state.products.push(p);
+        added++;
+      }
+    });
+    // Điền ảnh cho sản phẩm mẫu cũ chưa có ảnh (chỉ khi người dùng chưa tự đặt ảnh)
+    (base.products || []).forEach(function (bp) {
+      var mine = state.products.find(function (x) { return x.id === bp.id; });
+      if (mine && !mine.image && bp.image) mine.image = bp.image;
+    });
+
+    state.seedVersion = SEED_VERSION;
+    persist();
+    if (added) console.info('[AZmobile] Đã bổ sung ' + added + ' mục mới từ dữ liệu mẫu.');
+  }
+
   function persist() {
     try {
       localStorage.setItem(DB_KEY, JSON.stringify(state));
@@ -277,7 +523,7 @@
   }
 
   function db() {
-    if (!state) load();
+    if (!state) { load(); migrateSeed(); }
     return state;
   }
 
@@ -636,6 +882,7 @@
       badge: (data.badge || '').trim(),
       featured: !!data.featured,
       artColor: data.artColor || '#2563eb',
+      image: (data.image || '').trim(),
       specs: {
         cpu: (specs.cpu || '').trim(),
         ram: (specs.ram || '').trim(),
