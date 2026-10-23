@@ -545,6 +545,15 @@
     var btn = e.target.closest('[data-add]');
     if (!btn) return;
     e.preventDefault();
+    // Bắt buộc đăng nhập mới được thêm vào giỏ
+    if (!AZDB.session()) {
+      toast('Vui lòng đăng nhập để mua hàng', 'info');
+      var back = location.pathname.split('/').pop() + location.search;
+      setTimeout(function () {
+        location.href = 'login.html?next=' + encodeURIComponent(back || 'shop.html');
+      }, 700);
+      return;
+    }
     try {
       cart.add(btn.getAttribute('data-add'), 1);
       toast('Đã thêm vào giỏ hàng');

@@ -12,7 +12,7 @@ Website thương mại điện tử hoàn chỉnh cho cửa hàng laptop **AZmob
 | Trang chủ | Hero, danh mục, sản phẩm nổi bật, dịch vụ, đánh giá khách hàng |
 | Danh sách sản phẩm | Lọc theo danh mục, thương hiệu, khoảng giá, còn hàng, đang giảm giá; sắp xếp 5 kiểu; tìm kiếm |
 | Chi tiết sản phẩm | Ảnh minh hoạ, thông số, giá/giảm giá, tồn kho, chọn số lượng, tab mô tả – thông số – bảo hành, sản phẩm tương tự |
-| Giỏ hàng | Thêm/xoá/sửa số lượng, tính phí ship (miễn phí từ 5 triệu), đặt hàng |
+| Giỏ hàng | **Bắt buộc đăng nhập mới mua được**; thêm/xoá/sửa số lượng, tính phí ship (miễn phí từ 5 triệu), đặt hàng |
 | Thanh toán | Thông tin nhận hàng + 3 phương thức (COD, chuyển khoản, trả góp 0%), sinh mã đơn |
 | Đăng ký / Đăng nhập | Validate đầy đủ, lưu tài khoản, phân quyền admin/khách |
 | Tài khoản | Sửa hồ sơ, đổi mật khẩu, xem đơn hàng, xem lịch hẹn dịch vụ |
@@ -35,6 +35,11 @@ Website thương mại điện tử hoàn chỉnh cho cửa hàng laptop **AZmob
 Quản trị:   admin@azmobile.vn  /  admin123
 Khách hàng: khach@azmobile.vn  /  123456
 ```
+
+### Quy tắc mua hàng
+Khách **chưa đăng nhập** vẫn xem được sản phẩm, dịch vụ, bảng giá, nhưng khi bấm **Thêm vào giỏ** / **Mua ngay** / mở **Giỏ hàng** sẽ được chuyển tới trang đăng nhập (kèm `?next=` để quay lại đúng trang cũ).
+
+Mỗi tài khoản có **giỏ hàng riêng** (lưu theo `azmobile.cart.v2.<userId>`): đăng xuất sẽ không còn thấy giỏ của tài khoản trước, đăng nhập lại thì giỏ của mình được khôi phục. Khi đăng nhập, các món đang có trong giỏ khách (nếu có) sẽ được gộp vào giỏ tài khoản.
 
 ---
 

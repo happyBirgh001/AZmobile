@@ -148,11 +148,22 @@
   });
 
   /* --- Thêm giỏ / mua ngay --- */
+  function requireLoginForBuy() {
+    if (D.session()) return true;
+    U.toast('Vui lòng đăng nhập để mua hàng', 'info');
+    setTimeout(function () {
+      location.href = 'login.html?next=' + encodeURIComponent('product.html?id=' + p.id);
+    }, 700);
+    return false;
+  }
+
   document.getElementById('add-to-cart').addEventListener('click', function () {
+    if (!requireLoginForBuy()) return;
     AZCART.add(p.id, Number(qtyInput.value) || 1);
     U.toast('Đã thêm ' + (qtyInput.value) + ' sản phẩm vào giỏ');
   });
   document.getElementById('buy-now').addEventListener('click', function () {
+    if (!requireLoginForBuy()) return;
     AZCART.add(p.id, Number(qtyInput.value) || 1);
     location.href = 'cart.html';
   });

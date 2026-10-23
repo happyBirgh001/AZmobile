@@ -8,6 +8,21 @@
   var root = document.getElementById('cart-root');
   var session = D.session();
 
+  /* Bắt buộc đăng nhập mới xem được giỏ hàng */
+  if (!session) {
+    var subEl = document.getElementById('cart-sub');
+    if (subEl) subEl.textContent = 'Vui lòng đăng nhập để xem giỏ hàng.';
+    root.innerHTML = '<div class="empty" style="margin:36px 0 80px">' + U.icon('user', 44) +
+      '<h3>Bạn cần đăng nhập để mua hàng</h3>' +
+      '<p>Giỏ hàng được gắn với tài khoản của bạn để bảo mật thông tin đơn hàng.</p>' +
+      '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">' +
+        '<a class="btn btn--primary" href="login.html?next=cart.html">Đăng nhập ngay</a>' +
+        '<a class="btn btn--ghost" href="shop.html">Tiếp tục xem sản phẩm</a>' +
+      '</div></div>';
+    U.toast('Vui lòng đăng nhập để mua hàng', 'info');
+    return;
+  }
+
   function render() {
     var items = AZCART.detail();
     var sub = document.getElementById('cart-sub');
@@ -174,6 +189,11 @@
   }
 
   function placeOrder() {
+    if (!D.session()) {
+      U.toast('Vui lòng đăng nhập để đặt hàng', 'error');
+      setTimeout(function () { location.href = 'login.html?next=cart.html'; }, 700);
+      return;
+    }
     var name = document.getElementById('co-name');
     var phone = document.getElementById('co-phone');
     var addr = document.getElementById('co-address');
