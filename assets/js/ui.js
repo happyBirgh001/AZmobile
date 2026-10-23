@@ -169,14 +169,46 @@
   }
 
   /* ---------------- Giỏ hàng ---------------- */
-  var CART_KEY = 'azmobile.cart.v1';
+  // Mỗi tài khoản có giỏ riêng; khách chưa đăng nhập dùng giỏ "guest".
+  // Nhờ vậy đăng xuất / đổi tài khoản sẽ không thấy giỏ của người khác.
+  var CART_KEY = 'azmobile.cart.v2';
+  var CART_LEGACY_KEY = 'azmobile.cart.v1';
+
+  function currentOwnerId() {
+    try {
+      var s = AZDB.session();
+      return s && s.id ? s.id : 'guest';
+    } catch (e) { return 'guest'; }
+  }
+
+  function cartKeyFor(owner) {
+    return CART_KEY + '.' + (owner || 'guest');
+  }
+
+  function readRaw(key) {
+    try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { return []; }
+  }
+
+  function writeRaw(key, items) {
+    localStorage.setItem(key, JSON.stringify(items));
+  }
+
+  // Chuyển giỏ của phiên bản cũ (1 giỏ chung) sang đúng chủ sở hữu hiện tại
+  (function migrateLegacyCart() {
+    var old = localStorage.getItem(CART_LEGACY_KEY);
+    if (!old) return;
+    var target = cartKeyFor(currentOwnerId());
+    if (!localStorage.getItem(target)) localStorage.setItem(target, old);
+    localStorage.removeItem(CART_LEGACY_KEY);
+  })();
 
   var cart = {
+    owner: currentOwnerId,
     read: function () {
-      try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); } catch (e) { return []; }
+      return readRaw(cartKeyFor(currentOwnerId()));
     },
     write: function (items) {
-      localStorage.setItem(CART_KEY, JSON.stringify(items));
+      writeRaw(cartKeyFor(currentOwnerId()), items);
       cart.refreshBadge();
     },
     add: function (productId, qty) {
@@ -226,6 +258,39 @@
         el.textContent = n;
         el.classList.toggle('is-empty', n === 0);
       });
+    },
+    // Gọi sau khi đăng nhập: gộp giỏ khách vào giỏ tài khoản rồi xoá giỏ khách
+    onLogin: function () {
+      var guestKey = cartKeyFor('guest');
+      var guest = readRaw(guestKey);
+      if (guest.length) {
+        var mine = readRaw(cartKeyFor(currentOwnerId()));
+        guest.forEach(function (g) {
+          var f = mine.find(function (m) { return m.productId === g.productId; });
+          if (f) f.qty = f.qty + g.qty;
+          else mine.push({ productId: g.productId, qty: g.qty });
+        });
+        // kẹp lại theo tồn kho thực tế, bỏ sản phẩm đã bị xoá
+        mine = mine.map(function (m) {
+          var p = AZDB.productById(m.productId);
+          if (!p) return null;
+          return { productId: m.productId, qty: Math.max(1, Math.min(m.qty, Math.max(1, p.stock))) };
+        }).filter(Boolean);
+        writeRaw(cartKeyFor(currentOwnerId()), mine);
+        localStorage.removeItem(guestKey);
+      }
+      cart.refreshBadge();
+    },
+    // Gọi sau khi đăng xuất: quay về giỏ của khách (thường là rỗng)
+    onLogout: function () {
+      cart.refreshBadge();
+    },
+    // Xoá giỏ của mọi tài khoản (dùng khi khôi phục dữ liệu mẫu)
+    clearAll: function () {
+      Object.keys(localStorage).forEach(function (k) {
+        if (k.indexOf(CART_KEY + '.') === 0 || k === CART_LEGACY_KEY) localStorage.removeItem(k);
+      });
+      cart.refreshBadge();
     }
   };
 

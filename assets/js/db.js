@@ -295,6 +295,7 @@
     reset: function () {
       localStorage.removeItem(DB_KEY);
       localStorage.removeItem(SESSION_KEY);
+      if (global.AZCART && AZCART.clearAll) AZCART.clearAll();
       state = null;
       load();
     },
@@ -431,10 +432,14 @@
       if (u.password !== hash(password || '')) throw new Error('Mật khẩu không đúng.');
       var session = { id: u.id, name: u.name, email: u.email, role: u.role, at: nowISO() };
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+      // Giỏ hàng tách theo tài khoản: gộp giỏ khách vào giỏ của user vừa đăng nhập
+      if (global.AZCART && AZCART.onLogin) AZCART.onLogin();
       return session;
     },
     logout: function () {
       localStorage.removeItem(SESSION_KEY);
+      // Quay về giỏ của khách, không còn thấy giỏ của tài khoản vừa đăng xuất
+      if (global.AZCART && AZCART.onLogout) AZCART.onLogout();
     },
     session: function () {
       try {
