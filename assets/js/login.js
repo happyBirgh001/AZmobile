@@ -92,6 +92,7 @@
     var pass = document.getElementById('rg-pass');
     var pass2 = document.getElementById('rg-pass2');
     var agree = document.getElementById('rg-agree');
+    var news = document.getElementById('rg-news');
 
     var ok = true;
     if (!mark(name, name.value.trim().length >= 2)) ok = false;
@@ -107,12 +108,28 @@
     var btn = regForm.querySelector('button[type="submit"]');
     btn.disabled = true;
     btn.textContent = 'Đang tạo...';
+    var wantsNews = !!(news && news.checked);
+
     try {
       var user = D.register({
-        name: name.value, email: email.value, phone: phone.value, password: pass.value
+        name: name.value, email: email.value, phone: phone.value, password: pass.value,
+        marketingOptIn: wantsNews
       });
       var s = D.login(email.value, pass.value);
-      U.toast('Tạo tài khoản thành công!');
+
+      // Đồng ý nhận email khuyến mãi → đẩy email sang Mailchimp.
+      // Chạy nền, không chặn việc tạo tài khoản nếu Mailchimp lỗi.
+      if (wantsNews && window.AZMC) {
+        AZMC.subscribe({
+          email: email.value,
+          name: name.value,
+          phone: phone.value,
+          tags: ['dang-ky-tai-khoan']
+        });
+      }
+
+      var extra = (wantsNews && window.AZMC && AZMC.isConfigured()) ? ' ' + AZMC.confirmMessage() : '';
+      U.toast('Tạo tài khoản thành công!' + extra);
       go(s);
     } catch (err) {
       U.toast(err.message, 'error');

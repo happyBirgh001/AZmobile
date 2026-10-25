@@ -669,7 +669,13 @@
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Email không hợp lệ.');
       if (password.length < 6) throw new Error('Mật khẩu phải có ít nhất 6 ký tự.');
       if (db().users.some(function (u) { return u.email === email; })) throw new Error('Email này đã được đăng ký.');
-      var user = { id: uid('u'), name: name, email: email, phone: phone, password: hash(password), role: 'customer', createdAt: nowISO() };
+      var user = {
+        id: uid('u'), name: name, email: email, phone: phone, password: hash(password),
+        role: 'customer', createdAt: nowISO(),
+        // Đồng ý nhận email khuyến mãi (lưu lại làm bằng chứng consent + hiển thị ở trang tài khoản)
+        marketingOptIn: !!data.marketingOptIn,
+        marketingOptInAt: data.marketingOptIn ? nowISO() : null
+      };
       db().users.push(user);
       save();
       return { id: user.id, name: user.name, email: user.email, role: user.role };
@@ -716,6 +722,15 @@
       var u = db().users.find(function (x) { return x.id === id; });
       if (u && u.role === 'admin') throw new Error('Không thể xóa tài khoản quản trị.');
       db().users = db().users.filter(function (x) { return x.id !== id; });
+      save();
+      return true;
+    },
+    /* Bật/tắt đồng ý nhận email khuyến mãi */
+    setMarketingOptIn: function (id, on) {
+      var u = db().users.find(function (x) { return x.id === id; });
+      if (!u) throw new Error('Không tìm thấy tài khoản.');
+      u.marketingOptIn = !!on;
+      u.marketingOptInAt = on ? nowISO() : null;
       save();
       return true;
     },

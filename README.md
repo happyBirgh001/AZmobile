@@ -15,6 +15,7 @@ Website thương mại điện tử hoàn chỉnh cho cửa hàng laptop **AZmob
 | Giỏ hàng | **Bắt buộc đăng nhập mới mua được**; thêm/xoá/sửa số lượng, tính phí ship (miễn phí từ 5 triệu), đặt hàng |
 | Thanh toán | Thông tin nhận hàng + 3 phương thức (COD, chuyển khoản, trả góp 0%), sinh mã đơn |
 | Đăng ký / Đăng nhập | Validate đầy đủ, lưu tài khoản, phân quyền admin/khách |
+| Email khuyến mãi | Tick ô đồng ý khi đăng ký → tự thêm email vào Audience Mailchimp → Mailchimp gửi mail ưu đãi tự động. Khách tự bật/tắt trong trang tài khoản |
 | Tài khoản | Sửa hồ sơ, đổi mật khẩu, xem đơn hàng, xem lịch hẹn dịch vụ |
 | Sửa chữa & Bảo hành | Danh sách dịch vụ, quy trình 4 bước, form đặt lịch hẹn |
 
@@ -69,6 +70,8 @@ azmobile/
 │   │   ├── cart.js     Giỏ hàng & thanh toán
 │   │   ├── login.js    Đăng nhập / đăng ký
 │   │   ├── account.js  Trang tài khoản
+│   │   ├── mailchimp-config.js  Cấu hình Mailchimp (u, id, bật/tắt)
+│   │   ├── mailchimp.js         Gửi đăng ký nhận email khuyến mãi
 │   │   └── admin.js    Dashboard quản trị
 │   └── img/
 │       ├── favicon.svg
@@ -76,6 +79,7 @@ azmobile/
 │       └── products/            Ảnh 39 sản phẩm (<id>.jpg) + CREDITS.md
 ├── .nojekyll           Giúp GitHub Pages phục vụ file bắt đầu bằng "_"
 ├── .gitignore
+├── HUONG-DAN-MAILCHIMP.md  Hướng dẫn bật email khuyến mãi
 └── README.md
 ```
 
@@ -173,10 +177,31 @@ Sao lưu dữ liệu: vào **Admin → Cài đặt → Xuất dữ liệu (JSON)
 | Phí ship / ngưỡng miễn phí | `assets/js/db.js` → `createOrder` (biến `ship`) |
 | Logo, favicon | `assets/img/favicon.svg` và hàm `logoMark()` trong `ui.js` |
 | Ảnh sản phẩm | Thay tệp trong `assets/img/products/` (giữ nguyên tên `<id>.jpg`), hoặc nhập đường dẫn ảnh ở Admin → Sản phẩm → **Ảnh sản phẩm** |
+| Bật email khuyến mãi, đổi Audience Mailchimp | `assets/js/mailchimp-config.js` (xem mục 7) |
 
 ---
 
-## 7. Trình duyệt hỗ trợ
+## 7. Email khuyến mãi (Mailchimp)
+
+Khi khách tạo tài khoản và tick ô *"Tôi đồng ý nhận email khuyến mãi"*, email được đẩy vào
+**Audience** trên Mailchimp; sau đó Mailchimp gửi thư ưu đãi (welcome automation hoặc campaign).
+
+**Bật trong 3 bước:**
+
+1. Mailchimp → **Audience → Manage Audience → Signup forms → Embedded forms**, copy `u` và `id`
+   trong `action="https://xxx.us13.list-manage.com/subscribe/post?u=...&id=..."`.
+2. Mở `assets/js/mailchimp-config.js`, dán `u`, `id`, `dc` và đổi `enabled: true`.
+3. Tạo automation **Welcome new contacts** (hoặc Campaign) để gửi nội dung quảng cáo.
+
+Chi tiết đầy đủ, cách test, xử lý sự cố, lưu ý pháp lý (Nghị định 91/2020) và cách nâng cấp
+lên Marketing API khi có backend: xem **[HUONG-DAN-MAILCHIMP.md](HUONG-DAN-MAILCHIMP.md)**.
+
+> Mặc định `enabled: false` — website chạy y như cũ, không gửi gì. `u`/`id` là thông tin công
+> khai của form Mailchimp, **không phải API key**; tuyệt đối không đặt API key vào file JS.
+
+---
+
+## 8. Trình duyệt hỗ trợ
 
 Chrome, Edge, Firefox, Safari phiên bản mới (2022+). Giao diện responsive từ 360px đến 4K.
 

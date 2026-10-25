@@ -40,6 +40,13 @@
   }
 
   /* ---------------- Hồ sơ ---------------- */
+  function newsHint() {
+    if (window.AZMC && AZMC.isConfigured()) {
+      return 'Email khuyến mãi được gửi qua Mailchimp. Bạn có thể hủy hoàn toàn bằng liên kết "Hủy đăng ký" ở cuối mỗi email.';
+    }
+    return 'Chưa cấu hình Mailchimp (assets/js/mailchimp-config.js) — lựa chọn hiện chỉ được lưu trên trình duyệt này.';
+  }
+
   function viewProfile() {
     var orders = D.ordersByUser(raw.id);
     var bookings = D.bookings().filter(function (b) { return b.userId === raw.id; });
@@ -72,6 +79,19 @@
             '</div>' +
             '<button class="btn btn--primary" type="submit">Lưu thay đổi</button>' +
           '</form>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="panel" style="margin-bottom:18px">' +
+        '<div class="panel__head"><h3>Email khuyến mãi</h3>' +
+          '<span class="chip ' + (raw.marketingOptIn ? 'chip--info' : '') + '">' +
+            (raw.marketingOptIn ? 'Đang nhận' : 'Không nhận') + '</span></div>' +
+        '<div class="panel__body">' +
+          '<label class="check">' +
+            '<input type="checkbox" id="pf-news"' + (raw.marketingOptIn ? ' checked' : '') + '>' +
+            '<span>Tôi muốn nhận email ưu đãi, khuyến mãi và sản phẩm mới từ AZmobile.</span>' +
+          '</label>' +
+          '<p class="field__hint" style="margin:10px 0 0">' + newsHint() + '</p>' +
         '</div>' +
       '</div>' +
 
@@ -123,6 +143,39 @@
         U.toast(err.message, 'error');
       }
     });
+
+    /* Bật / tắt nhận email khuyến mãi */
+    var newsBox = document.getElementById('pf-news');
+    if (newsBox) {
+      newsBox.addEventListener('change', function () {
+        var on = newsBox.checked;
+        try {
+          D.setMarketingOptIn(raw.id, on);
+          raw = D.rawUser(raw.id);
+        } catch (err) {
+          newsBox.checked = !on;
+          U.toast(err.message, 'error');
+          return;
+        }
+
+        if (on) {
+          if (window.AZMC && AZMC.isConfigured()) {
+            AZMC.subscribe({
+              email: raw.email,
+              name: raw.name,
+              phone: raw.phone,
+              tags: ['bat-lai-tu-tai-khoan']
+            });
+            U.toast(AZMC.confirmMessage());
+          } else {
+            U.toast('Đã bật nhận email khuyến mãi');
+          }
+        } else {
+          U.toast('Đã tắt. Để xóa hoàn toàn khỏi danh sách, bấm "Hủy đăng ký" ở cuối email gần nhất.', 'info');
+        }
+        viewProfile();
+      });
+    }
   }
 
   /* ---------------- Đơn hàng ---------------- */
