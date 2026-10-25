@@ -6,6 +6,9 @@
   var params = new URLSearchParams(location.search);
   var next = params.get('next') || '';
 
+  /* Trang đăng nhập → noindex */
+  if (window.AZSEO) AZSEO.page({ title: 'Đăng nhập / Đăng ký', noindex: true });
+
   var tabs = document.getElementById('auth-tabs');
   var loginForm = document.getElementById('login-form');
   var regForm = document.getElementById('register-form');

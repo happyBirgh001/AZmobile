@@ -41,6 +41,9 @@
     services: ['Quản lý dịch vụ', 'Dịch vụ sửa chữa và gói bảo hành'],
     bookings: ['Lịch hẹn dịch vụ', 'Yêu cầu đặt lịch từ khách hàng'],
     customers: ['Khách hàng', 'Danh sách tài khoản đã đăng ký'],
+    posts: ['Quản lý bài viết', 'Viết, sửa bài viết và cấu hình SEO cho từng bài'],
+    seo: ['Tối ưu SEO hệ thống', 'Cấu hình SEO chung, robots.txt và sitemap.xml'],
+    facebook: ['Cấu hình Facebook', 'Fanpage, App ID, Pixel và thẻ Open Graph'],
     settings: ['Cài đặt hệ thống', 'Thông tin cửa hàng và quản lý dữ liệu']
   };
 
@@ -85,6 +88,9 @@
     if (v === 'services') renderServices();
     if (v === 'bookings') renderBookings();
     if (v === 'customers') renderCustomers();
+    if (v === 'posts') renderPosts();
+    if (v === 'seo') renderSeo();
+    if (v === 'facebook') renderFacebook();
     if (v === 'settings') renderSettings();
     updateBadges();
   }
@@ -96,6 +102,8 @@
     document.getElementById('nav-cats').textContent = s.categoryCount;
     document.getElementById('nav-bookings').textContent = s.pendingBookings;
     document.getElementById('nav-users').textContent = s.customerCount;
+    var np = document.getElementById('nav-posts');
+    if (np) np.textContent = D.posts().length;
   }
 
   /* ================= DASHBOARD ================= */
@@ -246,8 +254,49 @@
     document.getElementById('pf-screen').value = p ? p.specs.screen : '';
     document.getElementById('pf-desc').value = p ? p.description : '';
     document.getElementById('pf-featured').checked = p ? !!p.featured : false;
+
+    // SEO của sản phẩm
+    var ps = (p && p.seo) || {};
+    document.getElementById('pf-slug').value = p ? (p.slug || '') : '';
+    document.getElementById('pf-seo-title').value = ps.title || '';
+    document.getElementById('pf-seo-desc').value = ps.description || '';
+    document.getElementById('pf-seo-key').value = ps.keywords || '';
+    document.getElementById('pf-seo-img').value = ps.image || '';
+    document.getElementById('pf-seo-canon').value = ps.canonical || '';
+    document.getElementById('pf-seo-noindex').checked = !!ps.noindex;
+    syncSeoState('pf');
+
     document.querySelectorAll('#product-form .field.has-err').forEach(function (f) { f.classList.remove('has-err'); });
     openModal('modal-product');
+  }
+
+  /* Nhãn "Tự động / Đã cấu hình" của khối SEO */
+  function syncSeoState(prefix) {
+    var chip = document.getElementById(prefix + '-seo-state');
+    if (!chip) return;
+    var t = document.getElementById(prefix + '-seo-title');
+    var d = document.getElementById(prefix + '-seo-desc');
+    var filled = (t && t.value.trim()) || (d && d.value.trim());
+    chip.textContent = filled ? 'Đã cấu hình' : 'Tự động';
+    chip.style.background = filled ? '#ecfdf5' : '';
+    chip.style.borderColor = filled ? '#bbf7d0' : '';
+    chip.style.color = filled ? '#047857' : '';
+  }
+
+  /* Đếm ký tự cho ô SEO */
+  function counter(inputId, max) {
+    var el = document.getElementById(inputId);
+    var hint = document.getElementById(inputId + '-len');
+    if (!el || !hint || el.dataset.counted) return;
+    el.dataset.counted = '1';
+    var upd = function () {
+      var n = el.value.length;
+      hint.textContent = n + '/' + max + ' ký tự';
+      hint.classList.toggle('is-warn', n > max * 0.9 && n <= max);
+      hint.classList.toggle('is-over', n > max);
+    };
+    el.addEventListener('input', upd);
+    upd();
   }
 
   document.getElementById('p-add').addEventListener('click', function () {
@@ -312,6 +361,15 @@
       image: document.getElementById('pf-image').value,
       featured: document.getElementById('pf-featured').checked,
       description: document.getElementById('pf-desc').value,
+      slug: document.getElementById('pf-slug').value,
+      seo: {
+        title: document.getElementById('pf-seo-title').value,
+        description: document.getElementById('pf-seo-desc').value,
+        keywords: document.getElementById('pf-seo-key').value,
+        image: document.getElementById('pf-seo-img').value,
+        canonical: document.getElementById('pf-seo-canon').value,
+        noindex: document.getElementById('pf-seo-noindex').checked
+      },
       specs: {
         cpu: document.getElementById('pf-cpu').value,
         ram: document.getElementById('pf-ram').value,
@@ -700,6 +758,403 @@
       U.toast('Đã khôi phục dữ liệu mẫu');
       setTimeout(function () { location.reload(); }, 700);
     });
+  });
+
+  /* ================= BÀI VIẾT ================= */
+  var psQuery = '', psStatus = '';
+
+  function postSeoFilled(p) {
+    return !!(p.seo && (p.seo.title || p.seo.description));
+  }
+
+  function renderPosts() {
+    var list = D.posts().filter(function (p) {
+      if (psStatus && p.status !== psStatus) return false;
+      if (!psQuery) return true;
+      return (p.title + ' ' + p.slug + ' ' + p.category).toLowerCase().indexOf(psQuery) !== -1;
+    });
+
+    document.getElementById('posts-table').innerHTML = list.length ? '<table class="tb">' +
+      '<thead><tr><th>Bài viết</th><th>Chuyên mục</th><th>SEO</th><th>Trạng thái</th><th>Ngày đăng</th><th style="text-align:right">Thao tác</th></tr></thead><tbody>' +
+      list.map(function (p) {
+        return '<tr>' +
+          '<td><div class="tb__prod">' +
+            '<span class="tb__thumb">' + (p.cover
+              ? '<img src="' + U.esc(p.cover) + '" alt="" style="width:100%;height:100%;object-fit:cover">'
+              : U.icon('box', 16)) + '</span>' +
+            '<div><b>' + U.esc(p.title) + '</b><small>/' + U.esc(p.slug) + '</small></div>' +
+          '</div></td>' +
+          '<td>' + U.esc(p.category) + '</td>' +
+          '<td>' + (postSeoFilled(p)
+            ? '<span class="chip chip--ok">Đã cấu hình</span>'
+            : '<span class="chip chip--warn">Tự động</span>') + '</td>' +
+          '<td>' + (p.status === 'published'
+            ? '<span class="chip chip--ok">Đã đăng</span>'
+            : '<span class="chip">Nháp</span>') + '</td>' +
+          '<td>' + U.date(p.publishedAt) + '</td>' +
+          '<td><div class="row-actions">' +
+            '<button class="icon-btn" type="button" data-pedit="' + p.id + '" title="Sửa">' + U.icon('edit', 15) + '</button>' +
+            '<button class="icon-btn" type="button" data-pview="' + p.id + '" title="Xem trên web">' + U.icon('eye', 15) + '</button>' +
+            '<button class="icon-btn" type="button" data-pdel="' + p.id + '" title="Xoá">' + U.icon('trash', 15) + '</button>' +
+          '</div></td></tr>';
+      }).join('') + '</tbody></table>'
+      : '<div class="empty-mini">' + (psQuery || psStatus
+        ? 'Không có bài viết nào khớp bộ lọc'
+        : 'Chưa có bài viết nào — bấm "Viết bài mới" để tạo bài đầu tiên') + '</div>';
+  }
+
+  document.getElementById('ps-search').addEventListener('input', function (e) {
+    psQuery = e.target.value.toLowerCase().trim();
+    renderPosts();
+  });
+  document.getElementById('ps-status').addEventListener('change', function (e) {
+    psStatus = e.target.value;
+    renderPosts();
+  });
+  document.getElementById('ps-add').addEventListener('click', function () {
+    openPostModal(null);
+  });
+
+  document.getElementById('posts-table').addEventListener('click', function (e) {
+    var ed = e.target.closest('[data-pedit]');
+    var dl = e.target.closest('[data-pdel]');
+    var vw = e.target.closest('[data-pview]');
+    if (ed) openPostModal(ed.getAttribute('data-pedit'));
+    if (vw) {
+      var pv = D.postById(vw.getAttribute('data-pview'));
+      if (pv) window.open('post.html?slug=' + encodeURIComponent(pv.slug), '_blank');
+    }
+    if (dl) {
+      var p = D.postById(dl.getAttribute('data-pdel'));
+      askDelete('Xoá bài viết "' + p.title + '"? Hành động này không thể hoàn tác.', function () {
+        D.deletePost(p.id);
+        U.toast('Đã xoá bài viết');
+        renderPosts();
+        updateBadges();
+      });
+    }
+  });
+
+  function openPostModal(id) {
+    var p = id ? D.postById(id) : null;
+    var cats = [];
+    D.posts().forEach(function (x) {
+      if (x.category && cats.indexOf(x.category) === -1) cats.push(x.category);
+    });
+    document.getElementById('psm-cats').innerHTML = cats.map(function (c) {
+      return '<option value="' + U.esc(c) + '"></option>';
+    }).join('');
+
+    document.getElementById('psm-heading').textContent = p ? 'Sửa bài viết' : 'Viết bài mới';
+    document.getElementById('psm-id').value = p ? p.id : '';
+    document.getElementById('psm-title2').value = p ? p.title : '';
+    document.getElementById('psm-slug').value = p ? p.slug : '';
+    document.getElementById('psm-cat').value = p ? p.category : '';
+    document.getElementById('psm-author').value = p ? (p.author || '') : 'AZmobile';
+    document.getElementById('psm-date').value = (p && p.publishedAt ? p.publishedAt : new Date().toISOString()).slice(0, 10);
+    document.getElementById('psm-cover').value = p ? (p.cover || '') : '';
+    document.getElementById('psm-excerpt').value = p ? (p.excerpt || '') : '';
+    document.getElementById('psm-content').value = p ? (p.content || '') : '';
+    document.getElementById('psm-status').value = p ? p.status : 'published';
+
+    var s = (p && p.seo) || {};
+    document.getElementById('psm-seo-title').value = s.title || '';
+    document.getElementById('psm-seo-desc').value = s.description || '';
+    document.getElementById('psm-seo-key').value = s.keywords || '';
+    document.getElementById('psm-seo-img').value = s.image || '';
+    document.getElementById('psm-seo-canon').value = s.canonical || '';
+    document.getElementById('psm-seo-noindex').checked = !!s.noindex;
+    syncSeoState('psm');
+
+    document.querySelectorAll('#post-form .field.has-err').forEach(function (f) { f.classList.remove('has-err'); });
+    openModal('modal-post');
+  }
+
+  document.getElementById('post-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var id = document.getElementById('psm-id').value;
+    var titleEl = document.getElementById('psm-title2');
+    var ok = titleEl.value.trim().length >= 2;
+    titleEl.closest('.field').classList.toggle('has-err', !ok);
+    if (!ok) {
+      U.toast('Vui lòng nhập tiêu đề bài viết', 'error');
+      return;
+    }
+
+    var dateVal = document.getElementById('psm-date').value;
+    var data = {
+      title: titleEl.value,
+      slug: document.getElementById('psm-slug').value,
+      category: document.getElementById('psm-cat').value || 'Tin tức',
+      author: document.getElementById('psm-author').value || 'AZmobile',
+      cover: document.getElementById('psm-cover').value,
+      excerpt: document.getElementById('psm-excerpt').value,
+      content: document.getElementById('psm-content').value,
+      status: document.getElementById('psm-status').value,
+      publishedAt: dateVal ? new Date(dateVal + 'T08:00:00').toISOString() : D.nowISO(),
+      seo: {
+        title: document.getElementById('psm-seo-title').value,
+        description: document.getElementById('psm-seo-desc').value,
+        keywords: document.getElementById('psm-seo-key').value,
+        image: document.getElementById('psm-seo-img').value,
+        canonical: document.getElementById('psm-seo-canon').value,
+        noindex: document.getElementById('psm-seo-noindex').checked
+      }
+    };
+
+    try {
+      if (id) {
+        D.updatePost(id, data);
+        U.toast('Đã cập nhật bài viết');
+      } else {
+        D.addPost(data);
+        U.toast('Đã đăng bài viết mới');
+      }
+      closeModal('modal-post');
+      renderPosts();
+      updateBadges();
+    } catch (err) {
+      U.toast(err.message, 'error');
+    }
+  });
+
+  /* ================= SEO HỆ THỐNG ================= */
+  function siteBase() {
+    return (document.getElementById('seo-base').value || '').trim().replace(/\/+$/, '');
+  }
+
+  function renderSeo() {
+    var s = D.seo();
+    document.getElementById('seo-base').value = s.baseUrl || '';
+    document.getElementById('seo-tpl').value = s.titleTemplate || '';
+    document.getElementById('seo-title').value = s.defaultTitle || '';
+    document.getElementById('seo-desc').value = s.defaultDescription || '';
+    document.getElementById('seo-key').value = s.defaultKeywords || '';
+    document.getElementById('seo-img').value = s.defaultImage || '';
+    document.getElementById('seo-robots').value = s.robots || 'index,follow';
+    document.getElementById('seo-tw').value = s.twitterHandle || '';
+    document.getElementById('seo-sm-products').checked = !!s.sitemapProducts;
+    document.getElementById('seo-sm-posts').checked = !!s.sitemapPosts;
+
+    counter('seo-title', 60);
+    counter('seo-desc', 160);
+
+    renderSeoPreview();
+    renderSeoAudit();
+    renderSeoFiles();
+  }
+
+  function renderSeoPreview() {
+    var title = (document.getElementById('seo-title').value || '').trim() || '(chưa có tiêu đề)';
+    var desc = (document.getElementById('seo-desc').value || '').trim();
+    var base = siteBase().replace(/^https?:\/\//, '') || 'toiecdn.id.vn';
+    document.getElementById('seo-preview').innerHTML =
+      '<div class="serp__url">' + U.esc(base) + '</div>' +
+      '<div class="serp__title">' + U.esc(title.slice(0, 70)) + '</div>' +
+      '<div class="serp__desc">' + U.esc(desc.slice(0, 180) || 'Chưa có mô tả — Google sẽ tự trích một đoạn trong trang.') + '</div>';
+  }
+
+  function renderSeoAudit() {
+    var products = D.products();
+    var posts = D.posts();
+    var fb = D.facebook();
+    var title = (document.getElementById('seo-title').value || '').trim();
+    var desc = (document.getElementById('seo-desc').value || '').trim();
+    var base = siteBase();
+
+    var pOk = products.filter(function (p) { return p.seo && (p.seo.title || p.seo.description); }).length;
+    var poOk = posts.filter(postSeoFilled).length;
+
+    var rows = [
+      { ok: title.length >= 30 && title.length <= 60, label: 'Tiêu đề mặc định', value: title.length + '/60 ký tự' },
+      { ok: desc.length >= 100 && desc.length <= 160, label: 'Mô tả mặc định', value: desc.length + '/160 ký tự' },
+      { ok: /^https?:\/\//.test(base), label: 'Tên miền canonical', value: base || 'chưa đặt' },
+      {
+        ok: true,
+        label: 'Sản phẩm có SEO',
+        value: products.length + '/' + products.length + (pOk ? ' · ' + pOk + ' tuỳ chỉnh' : ' · dùng tự động')
+      },
+      {
+        ok: true,
+        label: 'Bài viết có SEO',
+        value: posts.length + '/' + posts.length + (poOk ? ' · ' + poOk + ' tuỳ chỉnh' : ' · dùng tự động')
+      },
+      { ok: !!fb.pixelEnabled && !!fb.pixelId, label: 'Facebook Pixel', value: fb.pixelEnabled && fb.pixelId ? 'đang bật' : 'chưa bật' }
+    ];
+
+    document.getElementById('seo-audit').innerHTML = rows.map(function (r) {
+      var cls = r.ok ? 'ok' : (/0\/|chưa/.test(r.value) ? 'bad' : 'warn');
+      return '<div class="seo-audit__row">' +
+        '<span class="seo-audit__dot ' + cls + '"></span>' +
+        '<b>' + r.label + '</b><span>' + U.esc(r.value) + '</span></div>';
+    }).join('');
+  }
+
+  function robotsTxt() {
+    var base = siteBase() || 'https://toiecdn.id.vn';
+    return [
+      'User-agent: *',
+      'Allow: /',
+      '',
+      'Disallow: /admin.html',
+      'Disallow: /account.html',
+      'Disallow: /cart.html',
+      'Disallow: /login.html',
+      '',
+      'Sitemap: ' + base + '/sitemap.xml',
+      ''
+    ].join('\n');
+  }
+
+  function sitemapXml() {
+    var base = siteBase() || 'https://toiecdn.id.vn';
+    var s = D.seo();
+    var urls = [
+      { loc: base + '/', pri: '1.0', freq: 'daily' },
+      { loc: base + '/shop.html', pri: '0.9', freq: 'daily' },
+      { loc: base + '/services.html', pri: '0.7', freq: 'weekly' },
+      { loc: base + '/blog.html', pri: '0.8', freq: 'weekly' }
+    ];
+    if (s.sitemapProducts) {
+      D.products().forEach(function (p) {
+        urls.push({ loc: base + '/product.html?id=' + encodeURIComponent(p.id), pri: '0.8', freq: 'weekly' });
+      });
+    }
+    if (s.sitemapPosts) {
+      D.publishedPosts().forEach(function (p) {
+        urls.push({
+          loc: base + '/post.html?slug=' + encodeURIComponent(p.slug),
+          pri: '0.6', freq: 'monthly', lastmod: (p.publishedAt || '').slice(0, 10)
+        });
+      });
+    }
+    return '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+      urls.map(function (u) {
+        return '  <url>\n' +
+          '    <loc>' + u.loc + '</loc>\n' +
+          (u.lastmod ? '    <lastmod>' + u.lastmod + '</lastmod>\n' : '') +
+          '    <changefreq>' + u.freq + '</changefreq>\n' +
+          '    <priority>' + u.pri + '</priority>\n' +
+          '  </url>';
+      }).join('\n') + '\n</urlset>\n';
+  }
+
+  function renderSeoFiles() {
+    var xml = sitemapXml();
+    var count = (xml.match(/<loc>/g) || []).length;
+    document.getElementById('seo-files').innerHTML =
+      '<div style="font-size:.74rem;color:#94a3b8;margin-bottom:6px">robots.txt</div>' +
+      '<pre class="code-box" style="max-height:150px">' + U.esc(robotsTxt()) + '</pre>' +
+      '<div style="font-size:.74rem;color:#94a3b8;margin:12px 0 6px">sitemap.xml · ' + count + ' URL</div>' +
+      '<pre class="code-box" style="max-height:190px">' + U.esc(xml) + '</pre>';
+  }
+
+  function download(name, text, mime) {
+    var blob = new Blob([text], { type: mime || 'text/plain;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  ['seo-base', 'seo-title', 'seo-desc'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', function () {
+      renderSeoPreview();
+      renderSeoAudit();
+    });
+  });
+
+  document.getElementById('seo-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    D.updateSeo({
+      baseUrl: siteBase(),
+      titleTemplate: document.getElementById('seo-tpl').value,
+      defaultTitle: document.getElementById('seo-title').value,
+      defaultDescription: document.getElementById('seo-desc').value,
+      defaultKeywords: document.getElementById('seo-key').value,
+      defaultImage: document.getElementById('seo-img').value,
+      robots: document.getElementById('seo-robots').value,
+      twitterHandle: document.getElementById('seo-tw').value,
+      sitemapProducts: document.getElementById('seo-sm-products').checked,
+      sitemapPosts: document.getElementById('seo-sm-posts').checked
+    });
+    renderSeoAudit();
+    renderSeoFiles();
+    U.toast('Đã lưu cấu hình SEO');
+  });
+
+  document.getElementById('seo-dl-sitemap').addEventListener('click', function () {
+    download('sitemap.xml', sitemapXml(), 'application/xml;charset=utf-8');
+    U.toast('Đã tải sitemap.xml');
+  });
+  document.getElementById('seo-dl-robots').addEventListener('click', function () {
+    download('robots.txt', robotsTxt());
+    U.toast('Đã tải robots.txt');
+  });
+
+  /* ================= FACEBOOK ================= */
+  function renderFacebook() {
+    var f = D.facebook();
+    document.getElementById('fb-page').value = f.pageUrl || '';
+    document.getElementById('fb-app').value = f.appId || '';
+    document.getElementById('fb-pixel').value = f.pixelId || '';
+    document.getElementById('fb-msg').value = f.messengerUrl || '';
+    document.getElementById('fb-verify').value = f.domainVerification || '';
+    document.getElementById('fb-ogtype').value = f.ogType || 'website';
+    document.getElementById('fb-locale').value = f.locale || 'vi_VN';
+    document.getElementById('fb-pixel-on').checked = !!f.pixelEnabled;
+
+    var rows = [
+      { label: 'Fanpage', value: f.pageUrl, on: !!f.pageUrl },
+      { label: 'App ID', value: f.appId, on: !!f.appId },
+      { label: 'Pixel ID', value: f.pixelId, on: !!f.pixelId },
+      { label: 'Messenger', value: f.messengerUrl, on: !!f.messengerUrl },
+      { label: 'Xác minh tên miền', value: f.domainVerification, on: !!f.domainVerification },
+      { label: 'Pixel đang chạy', value: f.pixelEnabled && f.pixelId ? 'Bật' : 'Tắt', on: !!(f.pixelEnabled && f.pixelId) }
+    ];
+    document.getElementById('fb-status').innerHTML = rows.map(function (r) {
+      return '<div class="fb-status__row"><b>' + r.label + '</b>' +
+        '<span class="' + (r.on ? 'on' : 'off') + '">' +
+        U.esc(r.on ? (r.value && r.value !== 'Bật' ? r.value : 'đã cấu hình') : 'chưa đặt') +
+        '</span></div>';
+    }).join('');
+
+    renderFbOg();
+  }
+
+  function renderFbOg() {
+    var f = D.facebook();
+    var seo = D.seo();
+    var st = D.settings();
+    var lines = [
+      '<meta property="og:type" content="' + U.esc(f.ogType || 'website') + '">',
+      '<meta property="og:site_name" content="' + U.esc(st.siteName || 'AZmobile') + '">',
+      '<meta property="og:locale" content="' + U.esc(f.locale || 'vi_VN') + '">',
+      '<meta property="og:title" content="' + U.esc(seo.defaultTitle || '') + '">',
+      '<meta property="og:description" content="' + U.esc((seo.defaultDescription || '').slice(0, 80)) + '…">',
+      '<meta property="og:image" content="' + U.esc(AZSEO.abs(seo.defaultImage || '')) + '">'
+    ];
+    if (f.appId) lines.push('<meta property="fb:app_id" content="' + U.esc(f.appId) + '">');
+    if (f.domainVerification) lines.push('<meta name="facebook-domain-verification" content="' + U.esc(f.domainVerification) + '">');
+    document.getElementById('fb-og').textContent = lines.join('\n');
+  }
+
+  document.getElementById('fb-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    D.updateFacebook({
+      pageUrl: document.getElementById('fb-page').value,
+      appId: document.getElementById('fb-app').value,
+      pixelId: document.getElementById('fb-pixel').value,
+      messengerUrl: document.getElementById('fb-msg').value,
+      domainVerification: document.getElementById('fb-verify').value,
+      ogType: document.getElementById('fb-ogtype').value,
+      locale: document.getElementById('fb-locale').value,
+      pixelEnabled: document.getElementById('fb-pixel-on').checked
+    });
+    renderFacebook();
+    U.toast('Đã lưu cấu hình Facebook');
   });
 
   /* ================= MODAL ================= */

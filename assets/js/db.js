@@ -437,6 +437,51 @@
       { id: 'b_2', userId: null, serviceId: 's_screen', name: 'Vũ Thanh Tùng', phone: '0966778899', device: 'Dell XPS 13', issue: 'Màn hình bị sọc dọc', date: '2026-10-24', status: 'pending', createdAt: '2026-10-21T15:20:00.000Z' }
     ];
 
+    var posts = [
+      {
+        id: 'post_gaming',
+        title: 'Cách chọn laptop gaming phù hợp ngân sách',
+        slug: 'cach-chon-laptop-gaming-phu-hop-ngan-sach',
+        category: 'Tư vấn',
+        author: 'AZmobile',
+        cover: 'assets/img/products/p_rog.jpg',
+        excerpt: 'Card đồ hoạ, CPU hay màn hình — đâu mới là thứ quyết định trải nghiệm chơi game? Bài viết chia ngân sách thành 3 nhóm để bạn chọn đúng ngay từ đầu.',
+        content: 'Khi mua laptop gaming, rất nhiều người chỉ nhìn vào card đồ hoạ rồi bỏ qua hai yếu tố quan trọng không kém là tản nhiệt và màn hình.\n\nVới ngân sách dưới 25 triệu, bạn nên ưu tiên RTX 4050 cùng một bộ tản nhiệt tốt thay vì cố lấy RTX 4060 trên một thân máy mỏng manh. Hiệu năng thực tế khi chơi lâu sẽ do khả năng giữ xung nhịp quyết định, không phải thông số trên giấy.\n\nTừ 25 đến 35 triệu là khoảng ngọt nhất. Ở tầm này bạn có RTX 4060, màn hình 165Hz và bộ nhớ DDR5 — đủ thoải mái cho cả game AAA lẫn dựng video cơ bản.\n\nTrên 35 triệu, hãy chú ý đến chất lượng màn hình: độ phủ màu, độ sáng và tần số quét. Đây là phần bạn nhìn thấy mỗi ngày, nâng cấp sau gần như không thể.',
+        status: 'published',
+        publishedAt: '2026-10-18T08:00:00.000Z',
+        createdAt: '2026-10-18T08:00:00.000Z',
+        seo: { title: '', description: '', keywords: 'laptop gaming, chọn laptop gaming, RTX 4060', image: '', canonical: '', noindex: false }
+      },
+      {
+        id: 'post-ssd',
+        title: 'Nên nâng RAM hay SSD trước để máy nhanh hơn?',
+        slug: 'nen-nang-ram-hay-ssd-truoc',
+        category: 'Thủ thuật',
+        author: 'AZmobile',
+        cover: 'assets/img/products/p_macair.jpg',
+        excerpt: 'Máy chậm, mở ứng dụng lâu, hay giật khi mở nhiều tab? Hai nâng cấp phổ biến nhất có tác dụng rất khác nhau — chọn sai là tiền mất mà máy vẫn chậm.',
+        content: 'Nếu máy bạn khởi động chậm, mở phần mềm mất vài chục giây, sao chép file lớn rất lâu thì nút thắt nằm ở ổ cứng. Nâng lên SSD NVMe là thay đổi rõ rệt nhất, thường nhanh hơn 5 đến 10 lần so với ổ cơ.\n\nNgược lại, nếu máy chạy ổn nhưng cứ mở trên 10 tab trình duyệt là đơ, hoặc chuyển qua lại giữa Photoshop và Chrome là giật, thì bạn đang thiếu RAM. Máy chỉ có 8GB mà dùng Windows 11 thì gần như chắc chắn phải nâng.\n\nThứ tự ưu tiên thực tế: SSD trước nếu máy còn dùng ổ cơ, RAM trước nếu máy đã có SSD nhưng chỉ 8GB.\n\nLưu ý khi nâng cấp: kiểm tra máy có khe RAM trống hay không, và bộ nhớ đã hàn chết chưa. Nhiều mẫu laptop mỏng nhẹ hiện nay hàn cứng cả RAM lẫn SSD nên không nâng được.',
+        status: 'published',
+        publishedAt: '2026-10-12T08:00:00.000Z',
+        createdAt: '2026-10-12T08:00:00.000Z',
+        seo: { title: '', description: '', keywords: 'nâng RAM, nâng SSD, laptop chậm', image: '', canonical: '', noindex: false }
+      },
+      {
+        id: 'post-baohanh',
+        title: 'Bảo hành laptop: 5 điều cần kiểm tra trước khi ký nhận',
+        slug: 'bao-hanh-laptop-5-dieu-can-kiem-tra',
+        category: 'Bảo hành',
+        author: 'AZmobile',
+        cover: 'assets/img/products/p_xps.jpg',
+        excerpt: 'Nhận máy về sau bảo hành mà vẫn lỗi? Phần lớn xuất phát từ việc không kiểm tra kỹ ngay tại cửa hàng. Đây là danh sách 5 bước nên làm.',
+        content: 'Thứ nhất, yêu cầu ghi rõ tình trạng máy trước khi nhận: tem niêm phong, số serial và các vết trầy đã có sẵn. Chụp ảnh lại ngay tại quầy.\n\nThứ hai, bật máy và kiểm tra đủ cổng: USB, HDMI, tai nghe, sạc. Lỗi cổng thường không lộ ra khi chỉ nhìn bề ngoài.\n\nThứ ba, chạy thử màn hình bằng một ảnh nền trắng và một ảnh nền đen để phát hiện điểm chết và ám màu.\n\nThứ tư, kiểm tra pin: xem dung lượng thiết kế còn bao nhiêu so với ban đầu. Pin chai là bộ phận hay bị từ chối bảo hành nhất.\n\nThứ năm, giữ lại phiếu bảo hành có dấu và ngày rõ ràng. Đây là căn cứ duy nhất khi phát sinh tranh chấp.',
+        status: 'published',
+        publishedAt: '2026-10-05T08:00:00.000Z',
+        createdAt: '2026-10-05T08:00:00.000Z',
+        seo: { title: '', description: '', keywords: 'bảo hành laptop, kiểm tra laptop', image: '', canonical: '', noindex: false }
+      }
+    ];
+
     return {
       version: 2,
       seedVersion: SEED_VERSION,
@@ -446,12 +491,35 @@
       services: services,
       orders: orders,
       bookings: bookings,
+      posts: posts,
       settings: {
         siteName: 'AZmobile',
         hotline: '1900 6868',
         email: 'hotro@azmobile.vn',
         address: '123 Nguyễn Trãi, Q.5, TP.HCM',
-        openHours: '08:00 – 21:00 (T2 – CN)'
+        openHours: '08:00 – 21:00 (T2 – CN)',
+        seo: {
+          baseUrl: 'https://toiecdn.id.vn',
+          titleTemplate: '{page} | {site}',
+          defaultTitle: 'AZmobile — Laptop, phụ kiện, sửa chữa & bảo hành chính hãng',
+          defaultDescription: 'AZmobile - hệ thống bán lẻ laptop gaming, văn phòng, đồ họa và phụ kiện chính hãng. Trung tâm sửa chữa, bảo hành uy tín, giá minh bạch, trả góp 0%.',
+          defaultKeywords: 'laptop, laptop gaming, laptop văn phòng, laptop đồ họa, phụ kiện laptop, sửa chữa laptop, bảo hành laptop',
+          defaultImage: 'assets/img/products/p_rog.jpg',
+          robots: 'index,follow',
+          twitterHandle: '',
+          sitemapProducts: true,
+          sitemapPosts: true
+        },
+        facebook: {
+          appId: '',
+          pageUrl: 'https://www.facebook.com/azmobile',
+          pixelId: '',
+          messengerUrl: '',
+          domainVerification: '',
+          ogType: 'website',
+          locale: 'vi_VN',
+          pixelEnabled: false
+        }
       },
       createdAt: t
     };
@@ -487,9 +555,42 @@
     }
   }
 
+  /* Bổ sung cấu trúc SEO / Facebook cho dữ liệu được tạo từ phiên bản cũ.
+     Chạy mỗi lần tải trang nhưng chỉ ghi lại khi thực sự có thay đổi. */
+  function ensureSeoShape() {
+    if (!state || !state.settings) return;
+    var base = seedData().settings;
+    var changed = false;
+
+    ['seo', 'facebook'].forEach(function (key) {
+      if (!state.settings[key]) {
+        state.settings[key] = clone(base[key]);
+        changed = true;
+        return;
+      }
+      Object.keys(base[key]).forEach(function (k) {
+        if (state.settings[key][k] === undefined) {
+          state.settings[key][k] = base[key][k];
+          changed = true;
+        }
+      });
+    });
+
+    (state.products || []).forEach(function (p) {
+      if (!p.seo) {
+        p.seo = { title: '', description: '', keywords: '', image: '', canonical: '', noindex: false };
+        changed = true;
+      }
+      if (!p.slug) { p.slug = slugify(p.name || ''); changed = true; }
+    });
+
+    if (changed) persist();
+  }
+
   /* Bổ sung danh mục / sản phẩm mẫu mới vào dữ liệu đã có (giữ nguyên đơn hàng, user…) */
   function migrateSeed() {
     if (!state) return;
+    ensureSeoShape();
     if (state.seedVersion === SEED_VERSION) return;
     var base = seedData();
     var added = 0;
@@ -831,6 +932,67 @@
       return api.settings();
     },
 
+    /* --- SEO hệ thống --- */
+    seo: function () {
+      return clone(db().settings.seo || {});
+    },
+    updateSeo: function (data) {
+      var cur = db().settings.seo || {};
+      Object.keys(data).forEach(function (k) { cur[k] = data[k]; });
+      db().settings.seo = cur;
+      save();
+      return api.seo();
+    },
+
+    /* --- Cấu hình Facebook --- */
+    facebook: function () {
+      return clone(db().settings.facebook || {});
+    },
+    updateFacebook: function (data) {
+      var cur = db().settings.facebook || {};
+      Object.keys(data).forEach(function (k) { cur[k] = data[k]; });
+      db().settings.facebook = cur;
+      save();
+      return api.facebook();
+    },
+
+    /* --- Bài viết --- */
+    posts: function () {
+      return clone(db().posts || []).sort(function (a, b) {
+        return new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0);
+      });
+    },
+    publishedPosts: function () {
+      return api.posts().filter(function (p) { return p.status === 'published'; });
+    },
+    postById: function (id) {
+      return clone((db().posts || []).find(function (p) { return p.id === id; }) || null);
+    },
+    postBySlug: function (slug) {
+      return clone((db().posts || []).find(function (p) { return p.slug === slug; }) || null);
+    },
+    addPost: function (data) {
+      var p = normalizePost(data);
+      p.id = uid('post');
+      p.createdAt = nowISO();
+      db().posts.unshift(p);
+      save();
+      return clone(p);
+    },
+    updatePost: function (id, data) {
+      var p = (db().posts || []).find(function (x) { return x.id === id; });
+      if (!p) throw new Error('Không tìm thấy bài viết.');
+      var n = normalizePost(Object.assign({}, p, data, { id: id }));
+      Object.keys(n).forEach(function (k) { p[k] = n[k]; });
+      save();
+      return clone(p);
+    },
+    deletePost: function (id) {
+      db().posts = (db().posts || []).filter(function (p) { return p.id !== id; });
+      save();
+      return true;
+    },
+
     /* --- Thống kê cho dashboard --- */
     stats: function () {
       var orders = db().orders;
@@ -908,7 +1070,44 @@
         vga: (specs.vga || '').trim(),
         screen: (specs.screen || '').trim()
       },
-      description: (data.description || '').trim()
+      description: (data.description || '').trim(),
+      slug: (data.slug || '').trim() || slugify(name),
+      seo: {
+        title: ((data.seo && data.seo.title) || '').trim(),
+        description: ((data.seo && data.seo.description) || '').trim(),
+        keywords: ((data.seo && data.seo.keywords) || '').trim(),
+        image: ((data.seo && data.seo.image) || '').trim(),
+        canonical: ((data.seo && data.seo.canonical) || '').trim(),
+        noindex: !!(data.seo && data.seo.noindex)
+      }
+    };
+  }
+
+  function normalizePost(data) {
+    var title = (data.title || '').trim();
+    if (!title) throw new Error('Tiêu đề bài viết không được để trống.');
+    var slug = (data.slug || '').trim() || slugify(title);
+    if (db().posts.some(function (p) { return p.slug === slug && p.id !== data.id; })) {
+      throw new Error('Đường dẫn (slug) này đã được dùng cho bài viết khác.');
+    }
+    return {
+      title: title,
+      slug: slug,
+      category: (data.category || 'Tin tức').trim(),
+      author: (data.author || 'AZmobile').trim(),
+      cover: (data.cover || '').trim(),
+      excerpt: (data.excerpt || '').trim(),
+      content: (data.content || '').trim(),
+      status: data.status === 'draft' ? 'draft' : 'published',
+      publishedAt: data.publishedAt || nowISO(),
+      seo: {
+        title: ((data.seo && data.seo.title) || '').trim(),
+        description: ((data.seo && data.seo.description) || '').trim(),
+        keywords: ((data.seo && data.seo.keywords) || '').trim(),
+        image: ((data.seo && data.seo.image) || '').trim(),
+        canonical: ((data.seo && data.seo.canonical) || '').trim(),
+        noindex: !!(data.seo && data.seo.noindex)
+      }
     };
   }
 

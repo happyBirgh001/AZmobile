@@ -18,16 +18,20 @@ Website thương mại điện tử hoàn chỉnh cho cửa hàng laptop **AZmob
 | Email khuyến mãi | Tick ô đồng ý khi đăng ký → tự thêm email vào danh sách Brevo → Brevo gửi mail ưu đãi tự động. Khách tự bật/tắt trong trang tài khoản |
 | Tài khoản | Sửa hồ sơ, đổi mật khẩu, xem đơn hàng, xem lịch hẹn dịch vụ |
 | Sửa chữa & Bảo hành | Danh sách dịch vụ, quy trình 4 bước, form đặt lịch hẹn |
+| Bài viết / Blog | Danh sách bài viết có lọc theo chuyên mục, trang chi tiết có mục lục nội dung, nút chia sẻ Facebook / Zalo / copy link, bài viết liên quan |
 
 ### Dành cho quản trị viên (`admin.html`)
 | Chức năng | Mô tả |
 |---|---|
 | Bảng điều khiển | 4 thẻ KPI (doanh thu, đơn, khách, sản phẩm), biểu đồ doanh thu 6 tháng, tồn kho theo danh mục, đơn gần đây, top bán chạy, cảnh báo sắp hết hàng |
-| Quản lý sản phẩm | **Thêm / sửa / xoá** sản phẩm, lọc theo danh mục, tìm kiếm |
+| Quản lý sản phẩm | **Thêm / sửa / xoá** sản phẩm, lọc theo danh mục, tìm kiếm; **cấu hình SEO riêng cho từng sản phẩm** (slug, title, description, keywords, ảnh chia sẻ, canonical, noindex) |
 | Quản lý danh mục | **Thêm / xoá** danh mục, chặn xoá khi còn sản phẩm, biểu đồ phân bổ |
 | Quản lý đơn hàng | Đổi trạng thái (chờ → xác nhận → đang giao → hoàn thành / huỷ), xoá đơn, tìm kiếm |
 | Quản lý dịch vụ | Thêm / xoá dịch vụ sửa chữa & gói bảo hành |
 | Lịch hẹn | Duyệt / cập nhật / xoá lịch hẹn khách gửi |
+| **Quản lý bài viết** | **Thêm / sửa / xoá** bài viết, tự sinh slug, đặt lịch đăng (nháp / đã đăng), **cấu hình SEO riêng cho từng bài** |
+| **Tối ưu SEO hệ thống** | Cấu hình tên miền canonical, mẫu tiêu đề, tiêu đề/mô tả/từ khoá mặc định, ảnh chia sẻ, robots; **xem trước kết quả trên Google**; **bảng tự kiểm tra SEO**; xem & tải `robots.txt` + `sitemap.xml` |
+| **Cấu hình Facebook** | Fanpage, App ID, Pixel ID (bật/tắt), link Messenger, mã xác minh tên miền, `og:type`, `og:locale`; xem trước đúng các thẻ Open Graph sẽ in ra |
 | Khách hàng | Danh sách tài khoản, xoá khách (không xoá được admin) |
 | Cài đặt | Sửa hotline, email, địa chỉ, giờ mở cửa; xuất dữ liệu JSON; khôi phục dữ liệu mẫu |
 
@@ -52,10 +56,14 @@ azmobile/
 ├── shop.html           Danh sách sản phẩm + bộ lọc
 ├── product.html        Chi tiết sản phẩm
 ├── services.html       Sửa chữa & bảo hành + đặt lịch
+├── blog.html           Danh sách bài viết
+├── post.html           Chi tiết bài viết
 ├── cart.html           Giỏ hàng & thanh toán
 ├── login.html          Đăng nhập / Đăng ký
 ├── account.html        Tài khoản khách hàng
 ├── admin.html          Trang quản trị
+├── robots.txt          Chỉ dẫn cho công cụ tìm kiếm
+├── sitemap.xml         Danh sách URL cho Google
 ├── assets/
 │   ├── css/
 │   │   ├── style.css   Design system (toàn bộ giao diện)
@@ -63,10 +71,13 @@ azmobile/
 │   ├── js/
 │   │   ├── db.js       Lớp dữ liệu + CRUD + xác thực (localStorage)
 │   │   ├── ui.js       Header/Footer, icon, giỏ hàng, toast, thẻ sản phẩm
+│   │   ├── seo.js      SEO engine: meta, Open Graph, Twitter Card, JSON-LD, Pixel
 │   │   ├── home.js     Trang chủ
 │   │   ├── shop.js     Bộ lọc & danh sách
 │   │   ├── product.js  Chi tiết sản phẩm
 │   │   ├── services.js Dịch vụ & đặt lịch
+│   │   ├── blog.js     Danh sách bài viết
+│   │   ├── post.js     Chi tiết bài viết
 │   │   ├── cart.js     Giỏ hàng & thanh toán
 │   │   ├── login.js    Đăng nhập / đăng ký
 │   │   ├── account.js  Trang tài khoản
@@ -80,6 +91,7 @@ azmobile/
 ├── .nojekyll           Giúp GitHub Pages phục vụ file bắt đầu bằng "_"
 ├── .gitignore
 ├── HUONG-DAN-EMAIL.md   Hướng dẫn bật email khuyến mãi (Brevo)
+├── HUONG-DAN-SEO.md     Hướng dẫn cấu hình SEO & Facebook
 └── README.md
 ```
 
@@ -100,7 +112,7 @@ python -m http.server 8000
 npx serve .
 ```
 
-> Lần đầu mở, hệ thống tự tạo dữ liệu mẫu: 6 danh mục, **39 sản phẩm**, 8 dịch vụ, 6 đơn hàng, 2 lịch hẹn và 2 tài khoản.
+> Lần đầu mở, hệ thống tự tạo dữ liệu mẫu: 6 danh mục, **39 sản phẩm**, 8 dịch vụ, 6 đơn hàng, 2 lịch hẹn, **3 bài viết** và 2 tài khoản.
 >
 > Nếu trình duyệt đã có dữ liệu cũ, hệ thống tự **bổ sung sản phẩm mới** (theo `SEED_VERSION` trong `db.js`) mà **không xoá** đơn hàng, tài khoản hay sản phẩm bạn tự thêm.
 
@@ -178,6 +190,9 @@ Sao lưu dữ liệu: vào **Admin → Cài đặt → Xuất dữ liệu (JSON)
 | Logo, favicon | `assets/img/favicon.svg` và hàm `logoMark()` trong `ui.js` |
 | Ảnh sản phẩm | Thay tệp trong `assets/img/products/` (giữ nguyên tên `<id>.jpg`), hoặc nhập đường dẫn ảnh ở Admin → Sản phẩm → **Ảnh sản phẩm** |
 | Bật email khuyến mãi, đổi danh sách Brevo | `assets/js/newsletter-config.js` (xem mục 7) |
+| Tiêu đề / mô tả / từ khoá mặc định, tên miền canonical | Admin → **Tối ưu SEO hệ thống** (xem mục 8) |
+| Facebook Fanpage, App ID, Pixel | Admin → **Facebook** (xem mục 8) |
+| Bài viết blog | Admin → **Bài viết** |
 
 ---
 
@@ -209,7 +224,62 @@ lên Brevo API khi có backend: xem **[HUONG-DAN-EMAIL.md](HUONG-DAN-EMAIL.md)**
 
 ---
 
-## 8. Trình duyệt hỗ trợ
+## 8. SEO & Facebook
+
+Toàn bộ thẻ SEO của website được sinh **tự động ở phía trình duyệt** bởi `assets/js/seo.js`,
+đọc cấu hình trong `localStorage`. Nhờ vậy mỗi trang đều có `title`, `description`,
+`canonical`, Open Graph, Twitter Card và JSON-LD riêng mà **không phải sửa HTML thủ công**.
+
+### 8.1 Bốn nơi cấu hình
+
+| Nơi cấu hình | Đường dẫn | Dùng để |
+|---|---|---|
+| SEO từng sản phẩm | Admin → **Sản phẩm** → Sửa → mục *Cấu hình SEO cho sản phẩm* | Slug, title, description, keywords, ảnh chia sẻ, canonical, `noindex` |
+| SEO từng bài viết | Admin → **Bài viết** → Sửa → mục *Cấu hình SEO cho bài viết* | Như trên, cộng thêm `datePublished` cho JSON-LD Article |
+| SEO hệ thống | Admin → **Tối ưu SEO** | Tên miền, mẫu tiêu đề, tiêu đề/mô tả/từ khoá mặc định, ảnh mặc định, robots, bật/tắt sitemap cho sản phẩm & bài viết |
+| Facebook | Admin → **Facebook** | Fanpage URL, App ID, Pixel ID, Messenger, mã xác minh tên miền, `og:type`, `og:locale` |
+
+Để trống một ô nghĩa là **dùng giá trị tự động** — ví dụ bỏ trống *Tiêu đề SEO* của sản phẩm thì
+tiêu đề sẽ lấy theo tên sản phẩm + thương hiệu. Chip **Tự động / Đã cấu hình** trong hộp thoại
+cho biết mục đó đang ở trạng thái nào.
+
+### 8.2 Thẻ được sinh ra
+
+Mỗi trang nhận:
+
+- `title`, `meta[name=description]`, `meta[name=keywords]`, `meta[name=robots]`
+- `link[rel=canonical]`
+- Open Graph: `og:site_name`, `og:locale`, `og:type`, `og:title`, `og:description`, `og:url`, `og:image`, `og:image:alt` (+ `fb:app_id` nếu đã đặt)
+- Twitter Card: `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`
+- JSON-LD `Organization` (mọi trang) + `Product` (trang sản phẩm), `Article` (bài viết), `Blog` (danh sách bài viết)
+
+Trang riêng tư (`cart.html`, `login.html`, `account.html`, `admin.html`) tự động nhận
+`robots = noindex,nofollow`; trang tìm kiếm `shop.html?q=...` cũng `noindex` để tránh nội dung trùng lặp.
+
+### 8.3 robots.txt & sitemap.xml
+
+Hai tệp nằm ngay **thư mục gốc** của website:
+
+- `robots.txt` — cho phép crawl toàn bộ, chặn `/admin.html`, `/account.html`, `/cart.html`, `/login.html`, trỏ tới sitemap.
+- `sitemap.xml` — 46 URL: trang chủ, sản phẩm, dịch vụ, blog + 39 sản phẩm + 3 bài viết.
+
+Khi thêm/sửa sản phẩm hoặc bài viết, vào **Admin → Tối ưu SEO → Tải sitemap.xml** rồi ghi đè
+tệp trên GitHub. Sau khi deploy, khai báo sitemap với Google tại
+[Google Search Console](https://search.google.com/search-console) → **Sitemaps** → nhập `sitemap.xml`.
+
+### 8.4 Facebook Pixel
+
+Nhập **Pixel ID** và tick *Bật Facebook Pixel trên toàn website* → mọi trang tự nạp
+`fbevents.js` và bắn sự kiện `PageView`. Để tắt, bỏ tick (không cần xoá Pixel ID).
+
+> Pixel chỉ hoạt động khi đã deploy lên tên miền thật, không hoạt động khi mở bằng `file://`.
+
+Hướng dẫn chi tiết từng bước, cách kiểm tra bằng Facebook Sharing Debugger và Google Rich Results
+Test: xem **[HUONG-DAN-SEO.md](HUONG-DAN-SEO.md)**.
+
+---
+
+## 9. Trình duyệt hỗ trợ
 
 Chrome, Edge, Firefox, Safari phiên bản mới (2022+). Giao diện responsive từ 360px đến 4K.
 

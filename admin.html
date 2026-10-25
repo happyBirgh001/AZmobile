@@ -59,6 +59,22 @@
       </button>
     </nav>
 
+    <div class="ad__navlabel">Nội dung &amp; SEO</div>
+    <nav class="ad__nav">
+      <button type="button" data-view="posts">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+        Bài viết <span class="badge-n" id="nav-posts">0</span>
+      </button>
+      <button type="button" data-view="seo">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6M8 11h6"/></svg>
+        Tối ưu SEO
+      </button>
+      <button type="button" data-view="facebook">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h-3a4 4 0 0 0-4 4v3H5v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3V3Z"/></svg>
+        Facebook
+      </button>
+    </nav>
+
     <div class="ad__navlabel">Hệ thống</div>
     <nav class="ad__nav">
       <button type="button" data-view="customers">
@@ -240,6 +256,162 @@
         <div class="card"><div class="table-wrap" id="users-table"></div></div>
       </section>
 
+      <!-- POSTS -->
+      <section class="ad__view" id="view-posts">
+        <div class="toolbar">
+          <input class="input" type="search" id="ps-search" placeholder="Tìm theo tiêu đề hoặc slug..." style="min-width:240px">
+          <select class="select" id="ps-status">
+            <option value="">Tất cả trạng thái</option>
+            <option value="published">Đã đăng</option>
+            <option value="draft">Bản nháp</option>
+          </select>
+          <div class="toolbar__right">
+            <button class="btn btn--primary btn--sm" type="button" id="ps-add">
+              <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Viết bài mới
+            </button>
+          </div>
+        </div>
+        <div class="card"><div class="table-wrap" id="posts-table"></div></div>
+      </section>
+
+      <!-- SEO HỆ THỐNG -->
+      <section class="ad__view" id="view-seo">
+        <div class="ad-grid">
+          <div class="card">
+            <div class="card__head"><h3>SEO toàn hệ thống</h3></div>
+            <div class="card__body">
+              <form id="seo-form" novalidate>
+                <div class="field"><label for="seo-base">Tên miền website</label>
+                  <input class="input" id="seo-base" placeholder="https://toiecdn.id.vn">
+                  <span class="field__hint">Dùng để tạo URL tuyệt đối cho <code>canonical</code> và Open Graph.</span></div>
+
+                <div class="field"><label for="seo-tpl">Mẫu tiêu đề</label>
+                  <input class="input" id="seo-tpl" placeholder="{page} | {site}">
+                  <span class="field__hint"><code>{page}</code> = tiêu đề trang · <code>{site}</code> = tên website</span></div>
+
+                <div class="field"><label for="seo-title">Tiêu đề mặc định</label>
+                  <input class="input" id="seo-title">
+                  <span class="field__hint" id="seo-title-len">0/60 ký tự</span></div>
+
+                <div class="field"><label for="seo-desc">Mô tả mặc định</label>
+                  <textarea class="textarea" id="seo-desc" rows="3"></textarea>
+                  <span class="field__hint" id="seo-desc-len">0/160 ký tự</span></div>
+
+                <div class="field"><label for="seo-key">Từ khoá mặc định</label>
+                  <input class="input" id="seo-key" placeholder="laptop, laptop gaming, ..."></div>
+
+                <div class="form-row">
+                  <div class="field"><label for="seo-img">Ảnh chia sẻ mặc định</label>
+                    <input class="input" id="seo-img" placeholder="assets/img/products/p_rog.jpg"></div>
+                  <div class="field"><label for="seo-robots">Robots mặc định</label>
+                    <select class="select" id="seo-robots">
+                      <option value="index,follow">index, follow (cho phép)</option>
+                      <option value="noindex,nofollow">noindex, nofollow (chặn)</option>
+                    </select></div>
+                </div>
+
+                <div class="field"><label for="seo-tw">Twitter / X handle</label>
+                  <input class="input" id="seo-tw" placeholder="@azmobile"></div>
+
+                <label class="check"><input type="checkbox" id="seo-sm-products">
+                  <span>Đưa <b>sản phẩm</b> vào <code>sitemap.xml</code></span></label>
+                <label class="check"><input type="checkbox" id="seo-sm-posts">
+                  <span>Đưa <b>bài viết</b> vào <code>sitemap.xml</code></span></label>
+
+                <button class="btn btn--primary" type="submit" style="margin-top:14px">Lưu cấu hình SEO</button>
+              </form>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card__head"><h3>Xem trước trên Google</h3></div>
+              <div class="card__body"><div class="serp" id="seo-preview"></div></div>
+            </div>
+
+            <div class="card" style="margin-top:18px">
+              <div class="card__head"><h3>Tình trạng tối ưu</h3></div>
+              <div class="card__body"><div class="seo-audit" id="seo-audit"></div></div>
+            </div>
+
+            <div class="card" style="margin-top:18px">
+              <div class="card__head"><h3>robots.txt &amp; sitemap.xml</h3></div>
+              <div class="card__body">
+                <div class="hint-box">
+                  <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+                  <span>Website đã có sẵn <code>robots.txt</code> và <code>sitemap.xml</code> ở <b>thư mục gốc</b>. Khi thêm/sửa sản phẩm hoặc bài viết, bấm tải về rồi ghi đè hai tệp đó trên GitHub để Google đọc được danh sách mới.</span>
+                </div>
+                <div class="code-box" id="seo-files"></div>
+                <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:12px">
+                  <button class="btn btn--ghost btn--sm" type="button" id="seo-dl-sitemap">Tải sitemap.xml</button>
+                  <button class="btn btn--ghost btn--sm" type="button" id="seo-dl-robots">Tải robots.txt</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FACEBOOK -->
+      <section class="ad__view" id="view-facebook">
+        <div class="ad-grid">
+          <div class="card">
+            <div class="card__head"><h3>Cấu hình Facebook</h3></div>
+            <div class="card__body">
+              <form id="fb-form" novalidate>
+                <div class="field"><label for="fb-page">Fanpage URL</label>
+                  <input class="input" id="fb-page" placeholder="https://www.facebook.com/azmobile"></div>
+
+                <div class="form-row">
+                  <div class="field"><label for="fb-app">App ID</label>
+                    <input class="input" id="fb-app" placeholder="1234567890"></div>
+                  <div class="field"><label for="fb-pixel">Pixel ID</label>
+                    <input class="input" id="fb-pixel" placeholder="9876543210"></div>
+                </div>
+
+                <div class="field"><label for="fb-msg">Link Messenger</label>
+                  <input class="input" id="fb-msg" placeholder="https://m.me/azmobile"></div>
+
+                <div class="field"><label for="fb-verify">Mã xác minh tên miền</label>
+                  <input class="input" id="fb-verify" placeholder="Mã trong thẻ meta facebook-domain-verification">
+                  <span class="field__hint">Lấy ở Facebook Business Manager → Brand safety → Domains.</span></div>
+
+                <div class="form-row">
+                  <div class="field"><label for="fb-ogtype">og:type</label>
+                    <select class="select" id="fb-ogtype">
+                      <option value="website">website</option>
+                      <option value="article">article</option>
+                      <option value="product">product</option>
+                    </select></div>
+                  <div class="field"><label for="fb-locale">og:locale</label>
+                    <select class="select" id="fb-locale">
+                      <option value="vi_VN">vi_VN</option>
+                      <option value="en_US">en_US</option>
+                    </select></div>
+                </div>
+
+                <label class="check"><input type="checkbox" id="fb-pixel-on">
+                  <span>Bật <b>Facebook Pixel</b> trên toàn website</span></label>
+
+                <button class="btn btn--primary" type="submit" style="margin-top:14px">Lưu cấu hình Facebook</button>
+              </form>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card__head"><h3>Trạng thái tích hợp</h3></div>
+              <div class="card__body"><div class="fb-status" id="fb-status"></div></div>
+            </div>
+            <div class="card" style="margin-top:18px">
+              <div class="card__head"><h3>Thẻ Open Graph đang phát ra</h3></div>
+              <div class="card__body"><div class="code-box" id="fb-og"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- SETTINGS -->
       <section class="ad__view" id="view-settings">
         <div class="ad-grid">
@@ -344,12 +516,117 @@
         <div class="field"><label for="pf-desc">Mô tả sản phẩm</label>
           <textarea class="textarea" id="pf-desc" placeholder="Mô tả ngắn gọn điểm nổi bật..."></textarea></div>
 
+        <div class="seo-block">
+          <div class="seo-block__head">
+            <span class="seo-block__title">Cấu hình SEO cho sản phẩm</span>
+            <span class="chip" id="pf-seo-state">Tự động</span>
+          </div>
+          <div class="field"><label for="pf-seo-title">Tiêu đề SEO</label>
+            <input class="input" id="pf-seo-title" placeholder="Để trống sẽ dùng tên sản phẩm">
+            <span class="field__hint" id="pf-seo-title-len">0/60 ký tự</span></div>
+          <div class="field"><label for="pf-seo-desc">Meta description</label>
+            <textarea class="textarea" id="pf-seo-desc" rows="2" placeholder="Để trống sẽ dùng mô tả sản phẩm"></textarea>
+            <span class="field__hint" id="pf-seo-desc-len">0/160 ký tự</span></div>
+          <div class="form-row">
+            <div class="field"><label for="pf-slug">Đường dẫn (slug)</label>
+              <input class="input" id="pf-slug" placeholder="asus-rog-strix-g16"></div>
+            <div class="field"><label for="pf-seo-key">Từ khoá</label>
+              <input class="input" id="pf-seo-key" placeholder="asus rog, laptop gaming, rtx 4060"></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="pf-seo-img">Ảnh chia sẻ (OG image)</label>
+              <input class="input" id="pf-seo-img" placeholder="Để trống dùng ảnh sản phẩm"></div>
+            <div class="field"><label for="pf-seo-canon">Canonical URL</label>
+              <input class="input" id="pf-seo-canon" placeholder="Để trống dùng URL hiện tại"></div>
+          </div>
+          <label class="check"><input type="checkbox" id="pf-seo-noindex">
+            <span>Không cho Google index sản phẩm này</span></label>
+        </div>
+
         <label class="check"><input type="checkbox" id="pf-featured">
           <span>Hiển thị ở mục <b>Sản phẩm nổi bật</b> trên trang chủ</span></label>
       </div>
       <div class="modal__foot">
         <button class="btn btn--ghost" type="button" data-close="modal-product">Huỷ</button>
         <button class="btn btn--primary" type="submit">Lưu sản phẩm</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Bài viết -->
+<div class="modal" id="modal-post">
+  <div class="modal__box modal__box--wide">
+    <div class="modal__head">
+      <h3 id="psm-heading">Viết bài mới</h3>
+      <button class="modal__close" type="button" data-close="modal-post">
+        <svg class="ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="post-form" novalidate>
+      <div class="modal__body">
+        <input type="hidden" id="psm-id">
+        <div class="field"><label for="psm-title2">Tiêu đề bài viết <span class="req">*</span></label>
+          <input class="input" id="psm-title2" placeholder="VD: Cách chọn laptop gaming phù hợp ngân sách">
+          <span class="field__err">Vui lòng nhập tiêu đề bài viết.</span></div>
+
+        <div class="form-row">
+          <div class="field"><label for="psm-slug">Đường dẫn (slug)</label>
+            <input class="input" id="psm-slug" placeholder="tu-dong-tao-tu-tieu-de">
+            <span class="field__hint">Để trống sẽ tự tạo từ tiêu đề.</span></div>
+          <div class="field"><label for="psm-cat">Chuyên mục</label>
+            <input class="input" id="psm-cat" placeholder="Tư vấn, Thủ thuật, Bảo hành..." list="psm-cats">
+            <datalist id="psm-cats"></datalist></div>
+        </div>
+
+        <div class="form-row">
+          <div class="field"><label for="psm-author">Tác giả</label>
+            <input class="input" id="psm-author" placeholder="AZmobile"></div>
+          <div class="field"><label for="psm-date">Ngày đăng</label>
+            <input class="input" id="psm-date" type="date"></div>
+        </div>
+
+        <div class="field"><label for="psm-cover">Ảnh bìa (đường dẫn)</label>
+          <input class="input" id="psm-cover" placeholder="assets/img/products/p_rog.jpg"></div>
+
+        <div class="field"><label for="psm-excerpt">Mô tả ngắn</label>
+          <textarea class="textarea" id="psm-excerpt" rows="2" placeholder="Hiển thị ở danh sách bài viết và làm meta description mặc định."></textarea></div>
+
+        <div class="field"><label for="psm-content">Nội dung</label>
+          <textarea class="textarea" id="psm-content" rows="8" placeholder="Mỗi đoạn văn cách nhau bằng 1 dòng trống."></textarea></div>
+
+        <div class="field"><label for="psm-status">Trạng thái</label>
+          <select class="select" id="psm-status">
+            <option value="published">Đăng ngay</option>
+            <option value="draft">Lưu nháp (ẩn khỏi website)</option>
+          </select></div>
+
+        <div class="seo-block">
+          <div class="seo-block__head">
+            <span class="seo-block__title">Cấu hình SEO cho bài viết</span>
+            <span class="chip" id="psm-seo-state">Tự động</span>
+          </div>
+          <div class="field"><label for="psm-seo-title">Tiêu đề SEO</label>
+            <input class="input" id="psm-seo-title" placeholder="Để trống sẽ dùng tiêu đề bài viết">
+            <span class="field__hint" id="psm-seo-title-len">0/60 ký tự</span></div>
+          <div class="field"><label for="psm-seo-desc">Meta description</label>
+            <textarea class="textarea" id="psm-seo-desc" rows="2" placeholder="Để trống sẽ dùng mô tả ngắn"></textarea>
+            <span class="field__hint" id="psm-seo-desc-len">0/160 ký tự</span></div>
+          <div class="field"><label for="psm-seo-key">Từ khoá</label>
+            <input class="input" id="psm-seo-key" placeholder="chọn laptop, laptop gaming"></div>
+          <div class="form-row">
+            <div class="field"><label for="psm-seo-img">Ảnh chia sẻ (OG image)</label>
+              <input class="input" id="psm-seo-img" placeholder="Để trống dùng ảnh bìa"></div>
+            <div class="field"><label for="psm-seo-canon">Canonical URL</label>
+              <input class="input" id="psm-seo-canon" placeholder="Để trống dùng URL hiện tại"></div>
+          </div>
+          <label class="check"><input type="checkbox" id="psm-seo-noindex">
+            <span>Không cho Google index bài viết này</span></label>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn--ghost" type="button" data-close="modal-post">Huỷ</button>
+        <button class="btn btn--primary" type="submit">Lưu bài viết</button>
       </div>
     </form>
   </div>
@@ -467,6 +744,7 @@
 <div id="toast-host" class="toast-host"></div>
 
 <script src="assets/js/db.js"></script>
+<script src="assets/js/seo.js"></script>
 <script src="assets/js/ui.js"></script>
 <script src="assets/js/admin.js"></script>
 </body>

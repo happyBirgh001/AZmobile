@@ -5,6 +5,16 @@
 
   U.mountLayout('services.html');
 
+  /* --- SEO --- */
+  if (window.AZSEO) {
+    AZSEO.page({
+      title: 'Sửa chữa, bảo hành & nâng cấp laptop',
+      description: 'Trung tâm bảo hành AZmobile: sửa mainboard, thay bàn phím, nâng cấp SSD/RAM, vệ sinh tản nhiệt, cứu dữ liệu. Báo giá trước, bảo hành 6 tháng, lấy ngay trong ngày.',
+      keywords: 'sửa chữa laptop, bảo hành laptop, nâng cấp SSD, thay RAM, vệ sinh tản nhiệt, cứu dữ liệu, AZmobile',
+      url: AZSEO.abs('services.html')
+    });
+  }
+
   var services = D.services();
   var settings = D.settings();
   document.getElementById('booking-hotline').textContent = settings.hotline + ' · ' + settings.openHours;

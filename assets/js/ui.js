@@ -328,6 +328,7 @@
     { href: 'index.html', label: 'Trang chủ' },
     { href: 'shop.html', label: 'Sản phẩm' },
     { href: 'services.html', label: 'Sửa chữa & Bảo hành' },
+    { href: 'blog.html', label: 'Bài viết' },
     { href: 'index.html#about', label: 'Giới thiệu' }
   ];
 

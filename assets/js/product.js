@@ -11,6 +11,7 @@
 
   if (!p) {
     document.title = 'Không tìm thấy sản phẩm — AZmobile';
+    if (window.AZSEO) AZSEO.page({ title: 'Không tìm thấy sản phẩm', noindex: true });
     root.innerHTML = '<div class="empty" style="margin:40px 0 60px">' + U.icon('search', 44) +
       '<h3>Sản phẩm không tồn tại</h3>' +
       '<p>Có thể sản phẩm đã bị xoá hoặc đường dẫn không đúng.</p>' +
@@ -21,6 +22,9 @@
 
   document.title = p.name + ' — AZmobile';
   document.getElementById('crumb-name').textContent = p.name;
+
+  /* --- SEO: title / description / OG / JSON-LD Product --- */
+  if (window.AZSEO) AZSEO.product(p);
 
   var cat = D.categoryById(p.categoryId);
   var off = p.oldPrice > p.price ? Math.round((1 - p.price / p.oldPrice) * 100) : 0;

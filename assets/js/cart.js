@@ -5,6 +5,9 @@
 
   U.mountLayout('cart.html');
 
+  /* Giỏ hàng là trang riêng tư → không cho công cụ tìm kiếm lập chỉ mục */
+  if (window.AZSEO) AZSEO.page({ title: 'Giỏ hàng & thanh toán', noindex: true });
+
   var root = document.getElementById('cart-root');
   var session = D.session();
 

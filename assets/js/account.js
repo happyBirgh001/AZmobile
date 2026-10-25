@@ -5,6 +5,9 @@
 
   U.mountLayout('account.html');
 
+  /* Trang tài khoản là trang riêng tư → noindex */
+  if (window.AZSEO) AZSEO.page({ title: 'Tài khoản của tôi', noindex: true });
+
   if (!D.session()) {
     U.requireLogin('account.html');
     return;

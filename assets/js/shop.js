@@ -34,20 +34,43 @@
       titleEl.textContent = 'Kết quả cho “' + state.q + '”';
       descEl.textContent = 'Các sản phẩm khớp với từ khoá bạn tìm kiếm.';
       crumb.textContent = 'Tìm kiếm';
-      return;
-    }
-    if (state.cats.length === 1) {
+    } else if (state.cats.length === 1 && cats.find(function (x) { return x.id === state.cats[0]; })) {
       var c = cats.find(function (x) { return x.id === state.cats[0]; });
-      if (c) {
-        titleEl.textContent = c.name;
-        descEl.textContent = c.description;
-        crumb.textContent = c.name;
-        return;
-      }
+      titleEl.textContent = c.name;
+      descEl.textContent = c.description;
+      crumb.textContent = c.name;
+    } else {
+      titleEl.textContent = 'Tất cả sản phẩm';
+      descEl.textContent = 'Laptop, màn hình, phụ kiện và linh kiện — tất cả đều chính hãng, bảo hành đầy đủ.';
+      crumb.textContent = 'Sản phẩm';
     }
-    titleEl.textContent = 'Tất cả sản phẩm';
-    descEl.textContent = 'Laptop, màn hình, phụ kiện và linh kiện — tất cả đều chính hãng, bảo hành đầy đủ.';
-    crumb.textContent = 'Sản phẩm';
+    applySeo();
+  }
+
+  /* --- SEO: bám theo danh mục / từ khoá đang chọn --- */
+  function applySeo() {
+    if (!window.AZSEO) return;
+    var titleEl = document.getElementById('page-title');
+    var descEl = document.getElementById('page-desc');
+    var heading = titleEl ? titleEl.textContent.trim() : 'Sản phẩm';
+    var base = descEl ? descEl.textContent.trim() : '';
+
+    // Trang lọc/tìm kiếm trùng nội dung với shop.html → canonical về shop.html
+    var pageTitle;
+    if (state.q) {
+      pageTitle = 'Tìm kiếm: ' + state.q;
+    } else if (heading === 'Tất cả sản phẩm' || /^laptop/i.test(heading)) {
+      pageTitle = heading;
+    } else {
+      pageTitle = 'Laptop ' + heading;
+    }
+    AZSEO.page({
+      title: pageTitle,
+      description: base,
+      keywords: [heading, 'laptop', 'chính hãng', 'AZmobile'].join(', '),
+      url: AZSEO.abs('shop.html'),
+      noindex: !!state.q
+    });
   }
 
   /* --- Dựng bộ lọc --- */

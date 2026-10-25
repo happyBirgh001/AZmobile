@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin.html
+Disallow: /account.html
+Disallow: /cart.html
+Disallow: /login.html
+
+Sitemap: https://toiecdn.id.vn/sitemap.xml

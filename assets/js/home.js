@@ -5,6 +5,16 @@
 
   U.mountLayout('index.html');
 
+  /* --- SEO trang chủ --- */
+  if (window.AZSEO) {
+    AZSEO.page({
+      title: 'Laptop, phụ kiện & sửa chữa chính hãng',
+      description: 'AZmobile bán laptop gaming, văn phòng, MacBook chính hãng, phụ kiện và dịch vụ sửa chữa — bảo hành 12–24 tháng, trả góp 0%, giao hàng toàn quốc.',
+      keywords: 'laptop, laptop gaming, macbook, phụ kiện laptop, sửa chữa laptop, bảo hành laptop, AZmobile',
+      url: AZSEO.abs('/')
+    });
+  }
+
   /* --- Hero art --- */
   var heroProduct = D.products().find(function (p) { return p.featured; }) || D.products()[0];
   var heroHost = document.getElementById('hero-art');
