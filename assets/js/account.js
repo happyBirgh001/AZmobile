@@ -41,10 +41,10 @@
 
   /* ---------------- Hồ sơ ---------------- */
   function newsHint() {
-    if (window.AZMC && AZMC.isConfigured()) {
-      return 'Email khuyến mãi được gửi qua Mailchimp. Bạn có thể hủy hoàn toàn bằng liên kết "Hủy đăng ký" ở cuối mỗi email.';
+    if (window.AZNL && AZNL.isConfigured()) {
+      return 'Email khuyến mãi được gửi qua Brevo. Bạn có thể hủy hoàn toàn bằng liên kết "Hủy đăng ký" ở cuối mỗi email.';
     }
-    return 'Chưa cấu hình Mailchimp (assets/js/mailchimp-config.js) — lựa chọn hiện chỉ được lưu trên trình duyệt này.';
+    return 'Chưa cấu hình Brevo (assets/js/newsletter-config.js) — lựa chọn hiện chỉ được lưu trên trình duyệt này.';
   }
 
   function viewProfile() {
@@ -159,14 +159,13 @@
         }
 
         if (on) {
-          if (window.AZMC && AZMC.isConfigured()) {
-            AZMC.subscribe({
+          if (window.AZNL && AZNL.isConfigured()) {
+            AZNL.subscribe({
               email: raw.email,
               name: raw.name,
-              phone: raw.phone,
-              tags: ['bat-lai-tu-tai-khoan']
+              phone: raw.phone
             });
-            U.toast(AZMC.confirmMessage());
+            U.toast(AZNL.confirmMessage());
           } else {
             U.toast('Đã bật nhận email khuyến mãi');
           }

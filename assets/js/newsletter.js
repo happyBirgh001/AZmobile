@@ -1,57 +1,42 @@
 /* =========================================================
-   AZmobile — Cầu nối Mailchimp (đăng ký nhận email khuyến mãi)
+   AZmobile — Cầu nối email marketing (Brevo)
    ---------------------------------------------------------
-   Vì website là front-end thuần (GitHub Pages), module này dùng
-   endpoint "Embedded form" công khai của Mailchimp:
-       https://<dc>.list-manage.com/subscribe/post?u=...&id=...
-   → Không cần API key, không cần server, không lộ bí mật gì.
+   Website là front-end thuần (GitHub Pages) nên KHÔNG giữ API key.
+   Module dùng endpoint "form nhúng" công khai của Brevo:
+       https://xxxxx.sibforms.com/serve/MUIFA...
 
-   Luồng hoạt động:
-     Khách đăng ký tài khoản (tick ô "nhận email khuyến mãi")
-        → AZMC.subscribe() gửi email sang Audience
-        → Mailchimp tự gửi mail quảng cáo / chuỗi welcome (Automation)
+   Luồng:
+     Khách đăng ký + tick "nhận email khuyến mãi"
+        → AZNL.subscribe() đẩy email vào danh sách Brevo
+        → Brevo tự gửi bài quảng cáo (Automation)
 
    Đặc điểm an toàn:
-     • Không chặn luồng đăng ký: Mailchimp lỗi thì tài khoản vẫn được tạo.
-     • Chống gửi trùng: mỗi email chỉ gửi 1 lần / 24h / trình duyệt.
+     • Không chặn luồng đăng ký: Brevo lỗi thì tài khoản vẫn được tạo.
+     • Chống gửi trùng: mỗi email 1 lần / 24h / trình duyệt.
      • Có hàng đợi: mất mạng thì lưu lại, lần mở trang sau tự gửi tiếp.
    ========================================================= */
 (function (global) {
   'use strict';
 
-  var QUEUE_KEY = 'azmobile.mc.queue.v1';
-  var SENT_KEY = 'azmobile.mc.sent.v1';
+  var QUEUE_KEY = 'azmobile.nl.queue.v1';
+  var SENT_KEY = 'azmobile.nl.sent.v1';
   var SENT_TTL = 24 * 60 * 60 * 1000;   // 24 giờ
   var QUEUE_MAX = 20;
 
   /* ---------------- Tiện ích ---------------- */
   function cfg() {
-    return global.AZMC_CONFIG || {};
+    return global.AZNL_CONFIG || {};
   }
 
   function isConfigured() {
     var c = cfg();
-    return !!(c.enabled && c.dc && c.u && c.id);
-  }
-
-  function host() {
-    var c = cfg();
-    return c.host || (c.dc + '.list-manage.com');
-  }
-
-  function endpoint() {
-    var c = cfg();
-    var url = 'https://' + host() + '/subscribe/post' +
-      '?u=' + encodeURIComponent(c.u) +
-      '&id=' + encodeURIComponent(c.id);
-    if (c.f_id) url += '&f_id=' + encodeURIComponent(c.f_id);
-    return url;
+    return !!(c.enabled && c.action);
   }
 
   function log() {
     if (!global.console) return;
     var args = Array.prototype.slice.call(arguments);
-    args.unshift('[AZMC]');
+    args.unshift('[AZNL]');
     console.info.apply(console, args);
   }
 
@@ -111,27 +96,23 @@
   /* ---------------- Dựng dữ liệu gửi đi ---------------- */
   function buildBody(data) {
     var c = cfg();
+    var f = c.fields || {};
     var body = new URLSearchParams();
 
-    body.set('EMAIL', data.email);
-    if (data.name) body.set('FNAME', String(data.name).trim());
-    if (data.phone) body.set('PHONE', String(data.phone).trim());
+    body.set(f.email || 'EMAIL', data.email);
+    if (data.name) body.set(f.firstName || 'FIRSTNAME', String(data.name).trim());
+    if (data.phone) body.set(f.phone || 'SMS', String(data.phone).trim());
 
-    // Trường "honeypot" chống bot của Mailchimp — BẮT BUỘC để rỗng
-    body.set('b_' + c.u + '_' + c.id, '');
-
-    // Gắn tag để lọc trong Mailchimp (khách từ website, từ trang đăng ký...)
-    var tags = [].concat(c.tags || [], data.tags || [])
-      .map(function (t) { return String(t || '').trim(); })
-      .filter(Boolean);
-    if (tags.length) body.set('tags', tags.join(','));
+    // Trường chống bot của Brevo — BẮT BUỘC để rỗng
+    body.set('email_address_check', '');
+    if (c.locale) body.set('locale', c.locale);
 
     return body;
   }
 
   /* ---------------- Gửi request ---------------- */
   function send(body) {
-    var url = endpoint();
+    var url = cfg().action;
 
     // Cách 1: fetch no-cors (request kiểu "simple" nên không bị preflight chặn)
     if (global.fetch) {
@@ -147,7 +128,7 @@
     // Cách 2 (dự phòng, trình duyệt rất cũ): form ẩn + iframe
     return new Promise(function (resolve, reject) {
       try {
-        var frameName = 'azmc_frame_' + Date.now();
+        var frameName = 'aznl_frame_' + Date.now();
         var iframe = document.createElement('iframe');
         iframe.name = frameName;
         iframe.style.display = 'none';
@@ -183,8 +164,8 @@
   /* ---------------- API công khai ---------------- */
 
   /**
-   * Đăng ký 1 email vào Audience.
-   * @param {{email:string, name?:string, phone?:string, tags?:string[]}} data
+   * Đăng ký 1 email vào danh sách Brevo.
+   * @param {{email:string, name?:string, phone?:string}} data
    * @returns {Promise<{ok:boolean, reason?:string}>}
    */
   function subscribe(data) {
@@ -195,7 +176,7 @@
       return Promise.resolve({ ok: false, reason: 'invalid-email' });
     }
     if (!isConfigured()) {
-      log('chưa cấu hình (mailchimp-config.js) — bỏ qua', email);
+      log('chưa cấu hình (newsletter-config.js) — bỏ qua', email);
       return Promise.resolve({ ok: false, reason: 'not-configured' });
     }
     if (recentlySent(email)) {
@@ -206,8 +187,7 @@
     var item = {
       email: email,
       name: data.name || '',
-      phone: data.phone || '',
-      tags: data.tags || []
+      phone: data.phone || ''
     };
 
     return send(buildBody(item))
@@ -243,14 +223,14 @@
     });
   }
 
-  /** Thông báo phù hợp với chế độ double opt-in của Audience. */
+  /** Thông báo phù hợp với chế độ double opt-in. */
   function confirmMessage() {
     return cfg().doubleOptIn
       ? 'Kiểm tra hộp thư để xác nhận đăng ký nhận ưu đãi nhé!'
       : 'Bạn sẽ nhận được ưu đãi qua email trong thời gian tới!';
   }
 
-  global.AZMC = {
+  global.AZNL = {
     isConfigured: isConfigured,
     subscribe: subscribe,
     flushQueue: flushQueue,

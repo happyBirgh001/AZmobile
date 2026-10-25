@@ -117,18 +117,17 @@
       });
       var s = D.login(email.value, pass.value);
 
-      // Đồng ý nhận email khuyến mãi → đẩy email sang Mailchimp.
-      // Chạy nền, không chặn việc tạo tài khoản nếu Mailchimp lỗi.
-      if (wantsNews && window.AZMC) {
-        AZMC.subscribe({
+      // Đồng ý nhận email khuyến mãi → đẩy email sang dịch vụ email (Mailchimp/Brevo).
+      // Chạy nền, không chặn việc tạo tài khoản nếu dịch vụ lỗi.
+      if (wantsNews && window.AZNL) {
+        AZNL.subscribe({
           email: email.value,
           name: name.value,
-          phone: phone.value,
-          tags: ['dang-ky-tai-khoan']
+          phone: phone.value
         });
       }
 
-      var extra = (wantsNews && window.AZMC && AZMC.isConfigured()) ? ' ' + AZMC.confirmMessage() : '';
+      var extra = (wantsNews && window.AZNL && AZNL.isConfigured()) ? ' ' + AZNL.confirmMessage() : '';
       U.toast('Tạo tài khoản thành công!' + extra);
       go(s);
     } catch (err) {

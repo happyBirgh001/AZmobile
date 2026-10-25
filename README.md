@@ -15,7 +15,7 @@ Website thương mại điện tử hoàn chỉnh cho cửa hàng laptop **AZmob
 | Giỏ hàng | **Bắt buộc đăng nhập mới mua được**; thêm/xoá/sửa số lượng, tính phí ship (miễn phí từ 5 triệu), đặt hàng |
 | Thanh toán | Thông tin nhận hàng + 3 phương thức (COD, chuyển khoản, trả góp 0%), sinh mã đơn |
 | Đăng ký / Đăng nhập | Validate đầy đủ, lưu tài khoản, phân quyền admin/khách |
-| Email khuyến mãi | Tick ô đồng ý khi đăng ký → tự thêm email vào Audience Mailchimp → Mailchimp gửi mail ưu đãi tự động. Khách tự bật/tắt trong trang tài khoản |
+| Email khuyến mãi | Tick ô đồng ý khi đăng ký → tự thêm email vào danh sách Brevo → Brevo gửi mail ưu đãi tự động. Khách tự bật/tắt trong trang tài khoản |
 | Tài khoản | Sửa hồ sơ, đổi mật khẩu, xem đơn hàng, xem lịch hẹn dịch vụ |
 | Sửa chữa & Bảo hành | Danh sách dịch vụ, quy trình 4 bước, form đặt lịch hẹn |
 
@@ -70,8 +70,8 @@ azmobile/
 │   │   ├── cart.js     Giỏ hàng & thanh toán
 │   │   ├── login.js    Đăng nhập / đăng ký
 │   │   ├── account.js  Trang tài khoản
-│   │   ├── mailchimp-config.js  Cấu hình Mailchimp (u, id, bật/tắt)
-│   │   ├── mailchimp.js         Gửi đăng ký nhận email khuyến mãi
+│   │   ├── newsletter-config.js Cấu hình Brevo (action, bật/tắt)
+│   │   ├── newsletter.js        Gửi đăng ký nhận email khuyến mãi
 │   │   └── admin.js    Dashboard quản trị
 │   └── img/
 │       ├── favicon.svg
@@ -79,7 +79,7 @@ azmobile/
 │       └── products/            Ảnh 39 sản phẩm (<id>.jpg) + CREDITS.md
 ├── .nojekyll           Giúp GitHub Pages phục vụ file bắt đầu bằng "_"
 ├── .gitignore
-├── HUONG-DAN-MAILCHIMP.md  Hướng dẫn bật email khuyến mãi
+├── HUONG-DAN-EMAIL.md   Hướng dẫn bật email khuyến mãi (Brevo)
 └── README.md
 ```
 
@@ -177,27 +177,29 @@ Sao lưu dữ liệu: vào **Admin → Cài đặt → Xuất dữ liệu (JSON)
 | Phí ship / ngưỡng miễn phí | `assets/js/db.js` → `createOrder` (biến `ship`) |
 | Logo, favicon | `assets/img/favicon.svg` và hàm `logoMark()` trong `ui.js` |
 | Ảnh sản phẩm | Thay tệp trong `assets/img/products/` (giữ nguyên tên `<id>.jpg`), hoặc nhập đường dẫn ảnh ở Admin → Sản phẩm → **Ảnh sản phẩm** |
-| Bật email khuyến mãi, đổi Audience Mailchimp | `assets/js/mailchimp-config.js` (xem mục 7) |
+| Bật email khuyến mãi, đổi danh sách Brevo | `assets/js/newsletter-config.js` (xem mục 7) |
 
 ---
 
-## 7. Email khuyến mãi (Mailchimp)
+## 7. Email khuyến mãi (Brevo)
 
 Khi khách tạo tài khoản và tick ô *"Tôi đồng ý nhận email khuyến mãi"*, email được đẩy vào
-**Audience** trên Mailchimp; sau đó Mailchimp gửi thư ưu đãi (welcome automation hoặc campaign).
+**danh sách (list)** trên Brevo; sau đó Brevo gửi thư ưu đãi qua automation.
 
 **Bật trong 3 bước:**
 
-1. Mailchimp → **Audience → Manage Audience → Signup forms → Embedded forms**, copy `u` và `id`
-   trong `action="https://xxx.us13.list-manage.com/subscribe/post?u=...&id=..."`.
-2. Mở `assets/js/mailchimp-config.js`, dán `u`, `id`, `dc` và đổi `enabled: true`.
-3. Tạo automation **Welcome new contacts** (hoặc Campaign) để gửi nội dung quảng cáo.
+1. Tạo tài khoản free tại https://www.brevo.com (300 email/ngày, không giới hạn contact).
+2. **Contacts → Forms → Create a form** → chọn list → tab **Share / Embed code** → copy URL
+   trong `action="https://xxxxx.sibforms.com/serve/MUIFA..."`.
+3. Dán URL đó vào `assets/js/newsletter-config.js` (`action`), đặt `enabled: true`.
+4. Trong Brevo: **Automations → Create → trigger "A contact is added to a list"** → thêm
+   bước **Send an email** → **Activate**.
 
 Chi tiết đầy đủ, cách test, xử lý sự cố, lưu ý pháp lý (Nghị định 91/2020) và cách nâng cấp
-lên Marketing API khi có backend: xem **[HUONG-DAN-MAILCHIMP.md](HUONG-DAN-MAILCHIMP.md)**.
+lên Brevo API khi có backend: xem **[HUONG-DAN-EMAIL.md](HUONG-DAN-EMAIL.md)**.
 
-> Mặc định `enabled: false` — website chạy y như cũ, không gửi gì. `u`/`id` là thông tin công
-> khai của form Mailchimp, **không phải API key**; tuyệt đối không đặt API key vào file JS.
+> Mặc định `action` để trống — website chạy y như cũ, không gửi gì. URL `sibforms.com/serve/...`
+> là thông tin công khai của form, **không phải API key**; tuyệt đối không đặt API key vào JS.
 
 ---
 
