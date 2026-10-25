@@ -513,12 +513,12 @@
         facebook: {
           appId: '',
           pageUrl: 'https://www.facebook.com/azmobile',
-          pixelId: '',
+          pixelId: '1584193006266574',
           messengerUrl: '',
           domainVerification: '',
           ogType: 'website',
           locale: 'vi_VN',
-          pixelEnabled: false
+          pixelEnabled: true
         }
       },
       createdAt: t
@@ -583,6 +583,14 @@
       }
       if (!p.slug) { p.slug = slugify(p.name || ''); changed = true; }
     });
+
+    // Bản mẫu đã có Pixel ID mà dữ liệu cũ trên máy này còn trống → nhận về
+    var fbNow = state.settings.facebook;
+    if (fbNow && !fbNow.pixelId && base.facebook && base.facebook.pixelId) {
+      fbNow.pixelId = base.facebook.pixelId;
+      fbNow.pixelEnabled = base.facebook.pixelEnabled;
+      changed = true;
+    }
 
     if (changed) persist();
   }
