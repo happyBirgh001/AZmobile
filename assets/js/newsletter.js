@@ -100,8 +100,13 @@
     var body = new URLSearchParams();
 
     body.set(f.email || 'EMAIL', data.email);
-    if (data.name) body.set(f.firstName || 'FIRSTNAME', String(data.name).trim());
-    if (data.phone) body.set(f.phone || 'SMS', String(data.phone).trim());
+
+    // firstName/phone: bỏ trống ('') nghĩa là form không có trường đó → không gửi
+    var nameField = f.firstName === undefined ? 'FIRSTNAME' : f.firstName;
+    if (data.name && nameField) body.set(nameField, String(data.name).trim());
+
+    var phoneField = f.phone === undefined ? 'SMS' : f.phone;
+    if (data.phone && phoneField) body.set(phoneField, String(data.phone).trim());
 
     // Trường chống bot của Brevo — BẮT BUỘC để rỗng
     body.set('email_address_check', '');
@@ -110,18 +115,50 @@
     return body;
   }
 
+  /* Đọc thông báo lỗi Brevo trả về: {"success":false,"errors":{"EMAIL":"..."}} */
+  function errorText(data) {
+    if (!data || !data.errors) return 'Brevo từ chối đăng ký';
+    return Object.keys(data.errors).map(function (k) {
+      return data.errors[k];
+    }).join(' ');
+  }
+
   /* ---------------- Gửi request ---------------- */
   function send(body) {
     var url = cfg().action;
+    var payload = body.toString();
+    var headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 
-    // Cách 1: fetch no-cors (request kiểu "simple" nên không bị preflight chặn)
+    // Cách 1: fetch thường — Brevo cho phép CORS nên đọc được kết quả thật
     if (global.fetch) {
       return global.fetch(url, {
         method: 'POST',
-        mode: 'no-cors',
         keepalive: true,   // request vẫn chạy tiếp dù trang chuyển hướng
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString()
+        headers: headers,
+        body: payload
+      }).then(function (res) {
+        return res.text().then(function (txt) {
+          var data = null;
+          try { data = JSON.parse(txt); } catch (e) { /* không phải JSON */ }
+          if (data && data.success === false) {
+            return { ok: false, reason: 'rejected', message: errorText(data) };
+          }
+          if (!res.ok && !data) {
+            return { ok: false, reason: 'rejected', message: 'HTTP ' + res.status };
+          }
+          return { ok: true };
+        });
+      }).catch(function () {
+        // Có thể do CORS bị chặn → thử lại kiểu "no-cors" (không đọc được kết quả)
+        return global.fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          keepalive: true,
+          headers: headers,
+          body: payload
+        }).then(function () {
+          return { ok: true, blind: true };
+        });
       });
     }
 
@@ -154,7 +191,7 @@
           form.remove();
           iframe.remove();
         }, 4000);
-        resolve(true);
+        resolve({ ok: true, blind: true });
       } catch (err) {
         reject(err);
       }
@@ -191,7 +228,12 @@
     };
 
     return send(buildBody(item))
-      .then(function () {
+      .then(function (res) {
+        if (res && res.ok === false) {
+          // Brevo từ chối (email sai định dạng, domain bị chặn...) → không xếp hàng đợi
+          log('bị từ chối', email, res.message);
+          return { ok: false, reason: res.reason || 'rejected', message: res.message };
+        }
         markSent(email);
         queueRemove(email);
         log('đã đăng ký', email);
@@ -215,7 +257,13 @@
         queueRemove(item.email);
         return;
       }
-      send(buildBody(item)).then(function () {
+      send(buildBody(item)).then(function (res) {
+        if (res && res.ok === false) {
+          // Bị từ chối thì gửi lại cũng vô ích → bỏ khỏi hàng đợi
+          queueRemove(item.email);
+          log('bị từ chối, bỏ khỏi hàng đợi', item.email, res.message);
+          return;
+        }
         markSent(item.email);
         queueRemove(item.email);
         log('đã gửi lại từ hàng đợi', item.email);
