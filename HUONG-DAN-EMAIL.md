@@ -120,6 +120,7 @@ Cấu hình ở **2 nơi phải khớp nhau**: trong `newsletter-config.js` và 
 | ------------------------------------ | ------------------------------------------- | ------------------------------------------------------------------ |
 | Đăng ký xong, Brevo không có contact | `action` còn rỗng / `enabled` = false       | F12 → Console, xem dòng `[AZNL]`; thấy `chưa cấu hình` là chưa bật |
 | Contact có nhưng không nhận mail     | Automation chưa **Activate**, hoặc sai list | Kiểm tra workflow + đúng list chưa                                 |
+| Đăng ký lại nhưng vẫn không có mail  | Email **đã có sẵn** trong list từ trước     | Brevo chỉ kích hoạt khi contact **được thêm mới**. Xem ghi chú dưới |
 | Không thấy mail                      | Sender là `@gmail.com` → trượt DMARC        | Xác thực tên miền riêng + đổi sender — xem **mục 7b**             |
 | Console: `lỗi mạng, đã xếp hàng đợi` | Mất mạng / chặn quảng cáo                   | Module tự lưu, mở lại trang sẽ gửi tiếp                            |
 | Gửi thử nhiều lần chỉ thấy 1 request | Chống trùng 24h                             | Xoá key `azmobile.nl.sent.v1` trong localStorage                   |
@@ -192,6 +193,23 @@ Sau đó vào Automation → bấm vào node **Send an email** → mục **Sende
 
 > Lưu ý: nếu tên miền **hết hạn** (03/07/2028) hoặc bạn đổi DNS, DKIM sẽ mất và thư lại bị
 > đánh spam. Gia hạn tên miền đúng hạn và **không xoá** 4 bản ghi trên.
+
+### ⚠️ Mỗi email chỉ nhận automation MỘT lần
+
+Trigger của automation là **"Contact added to list"** — chỉ chạy khi contact **được thêm mới**
+vào danh sách. Nếu email đó đã nằm trong list từ trước (do bạn test trước đó, hoặc khách đã
+đăng ký một lần rồi), thì đăng ký lại **không** kích hoạt lại, và Brevo cũng không báo lỗi gì.
+
+Đây **không phải lỗi web** — đó là cách Brevo chống gửi trùng.
+
+**Muốn test lại cùng một email:**
+
+1. Brevo → **Contacts** → tìm email đó.
+2. Tick chọn dòng → **More actions ▾** → **Remove from list(s)** → chọn *"Remove it from this
+   list only"* → **Remove**. (Hoặc **Delete permanently** nếu muốn xoá hẳn.)
+3. Chờ ~1 phút cho Brevo xử lý, rồi đăng ký lại trên web → automation sẽ chạy lại.
+
+> Với khách thật thì không cần làm gì: mỗi người chỉ đăng ký một lần nên luôn là "thêm mới".
 
 ---
 
