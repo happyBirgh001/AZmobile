@@ -117,7 +117,7 @@
       });
       var s = D.login(email.value, pass.value);
 
-      // Đồng ý nhận email khuyến mãi → đẩy email sang dịch vụ email (Mailchimp/Brevo).
+      // Đồng ý nhận email khuyến mãi → đẩy email sang Brevo.
       // Chạy nền, không chặn việc tạo tài khoản nếu dịch vụ lỗi.
       if (wantsNews && window.AZNL) {
         AZNL.subscribe({
