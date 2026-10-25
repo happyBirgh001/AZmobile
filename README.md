@@ -194,6 +194,12 @@ Khi khách tạo tài khoản và tick ô *"Tôi đồng ý nhận email khuyế
 3. Dán URL đó vào `assets/js/newsletter-config.js` (`action`), đặt `enabled: true`.
 4. Trong Brevo: **Automations → Create → trigger "A contact is added to a list"** → thêm
    bước **Send an email** → **Activate**.
+5. **Bắt buộc để thư không vào Spam:** xác thực tên miền riêng ở **Senders & Domains → Domains**
+   rồi đặt sender là `khuyenmai@<tên-miền-của-bạn>`. Gửi bằng địa chỉ `@gmail.com` sẽ bị Gmail
+   chặn vì không ký được DKIM cho gmail.com. Xem **mục 7b** trong HUONG-DAN-EMAIL.md.
+
+> Shop đang dùng: tên miền `toiecdn.id.vn` (đã **Authenticated**), sender
+> `AZmobile <khuyenmai@toiecdn.id.vn>`, automation *Welcome message* gắn với list *Your first list #2*.
 
 Chi tiết đầy đủ, cách test, xử lý sự cố, lưu ý pháp lý (Nghị định 91/2020) và cách nâng cấp
 lên Brevo API khi có backend: xem **[HUONG-DAN-EMAIL.md](HUONG-DAN-EMAIL.md)**.

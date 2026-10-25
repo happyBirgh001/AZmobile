@@ -120,7 +120,7 @@ Cấu hình ở **2 nơi phải khớp nhau**: trong `newsletter-config.js` và 
 | ------------------------------------ | ------------------------------------------- | ------------------------------------------------------------------ |
 | Đăng ký xong, Brevo không có contact | `action` còn rỗng / `enabled` = false       | F12 → Console, xem dòng `[AZNL]`; thấy `chưa cấu hình` là chưa bật |
 | Contact có nhưng không nhận mail     | Automation chưa **Activate**, hoặc sai list | Kiểm tra workflow + đúng list chưa                                 |
-| Không thấy mail                      | Vào Spam / Promotions                       | Đánh dấu "Not spam"; xác minh domain gửi ở **Senders & Domains**   |
+| Không thấy mail                      | Sender là `@gmail.com` → trượt DMARC        | Xác thực tên miền riêng + đổi sender — xem **mục 7b**             |
 | Console: `lỗi mạng, đã xếp hàng đợi` | Mất mạng / chặn quảng cáo                   | Module tự lưu, mở lại trang sẽ gửi tiếp                            |
 | Gửi thử nhiều lần chỉ thấy 1 request | Chống trùng 24h                             | Xoá key `azmobile.nl.sent.v1` trong localStorage                   |
 
@@ -131,6 +131,67 @@ AZNL.isConfigured()                                              // → true n�
 AZNL.subscribe({ email: 'ban@example.com' })                     // → {ok:true}
 AZNL.subscribe({ email: 'sai@localhost' })                       // → {ok:false, reason:'rejected', message:'...'}
 ```
+
+---
+
+## 7b. Xác thực tên miền gửi — bước quyết định để mail không vào Spam
+
+> **Đây là lý do phổ biến nhất khiến "Brevo báo đã gửi nhưng Gmail không thấy mail".**
+
+Nếu để **From Email** là một địa chỉ `@gmail.com`, thư gần như chắc chắn bị Gmail chặn hoặc đẩy
+vào Spam. Lý do: `gmail.com` có bản ghi DMARC `p=quarantine`, mà Brevo **không thể ký DKIM**
+cho tên miền `gmail.com` (họ không giữ private key của Google). Thiếu chữ ký hợp lệ → trượt
+DMARC → thư bị xử lý như thư giả mạo.
+
+Cách đúng: dùng **tên miền riêng của shop** (ở đây là `toiecdn.id.vn`, mua tại Mắt Bão).
+
+### Các bước đã làm (làm lại được bất cứ lúc nào)
+
+1. Brevo → **Senders & Domains → Domains → Add a new domain** → nhập `toiecdn.id.vn`.
+2. Bỏ trống **Branded subdomain** (có thể bật sau, cần thêm 2 bản ghi CNAME nữa).
+3. Chọn **Manual** (Mắt Bão không nằm trong danh sách tự kết nối của Brevo).
+4. Mở Mắt Bão → tên miền → tab **Bản ghi DNS** → **Tạo bản ghi**, thêm đúng 4 bản ghi dưới đây.
+5. Chờ DNS lan truyền (thường 5–30 phút), bấm **Verify records** → cả 4 dòng phải hiện `success`.
+6. Bấm **Authenticate domain** → trạng thái đổi thành **Authenticated**.
+
+### 4 bản ghi DNS
+
+| Host (Tên)         | Loại  | Giá trị                                              |
+| ------------------ | ----- | ---------------------------------------------------- |
+| `@`                | TXT   | `brevo-code:441c8ced4064d6bf40e24321311f8330`        |
+| `brevo1._domainkey`| CNAME | `b1.toiecdn-id-vn.dkim.brevo.com`                    |
+| `brevo2._domainkey`| CNAME | `b2.toiecdn-id-vn.dkim.brevo.com`                    |
+| `_dmarc`           | TXT   | `v=DMARC1; p=none; rua=mailto:rua@dmarc.brevo.com`   |
+
+> ⚠️ Giá trị DKIM chứa tên miền viết bằng dấu gạch: `toiecdn.id.vn` → `toiecdn-id-vn`.
+> Gõ sai một ký tự (ví dụ `toicdn-id-vn`) là Verify sẽ báo đỏ dù bản ghi "trông có vẻ đúng".
+
+**Mẹo nhập ở Mắt Bão:** giá trị TXT nằm trong ô `textarea` (placeholder "Text"), giá trị CNAME
+nằm trong ô `input` (placeholder "Tên miền."). Nếu form "Tạo bản ghi" không hiện, cuộn trang
+lên đầu rồi bấm lại.
+
+### Sau khi xác thực: đổi người gửi
+
+Brevo → **Senders & Domains → Senders → Add sender**:
+
+- From Name: `AZmobile`
+- From Email: `khuyenmai@toiecdn.id.vn`
+
+Tên miền đã xác thực nên sender được duyệt **ngay**, không cần bấm link xác nhận trong hộp thư.
+Sau đó vào Automation → bấm vào node **Send an email** → mục **Sender** → chọn
+`khuyenmai@toiecdn.id.vn` → **Save**.
+
+### Kiểm chứng kết quả (đã chạy thật)
+
+| Bước                                        | Kết quả                                   |
+| ------------------------------------------- | ----------------------------------------- |
+| Gửi test từ Automation                      | Vào thẳng **Hộp thư đến**, không Spam     |
+| Header thư                                  | `AZmobile <khuyenmai@toiecdn.id.vn>`      |
+| Đăng ký mới bằng `...@gmail.com`            | Automation `Started 1 / Finished 1 (100%)`|
+| Thời gian từ lúc đăng ký đến khi nhận mail  | ~2 phút (delay 1 phút + thời gian xử lý)  |
+
+> Lưu ý: nếu tên miền **hết hạn** (03/07/2028) hoặc bạn đổi DNS, DKIM sẽ mất và thư lại bị
+> đánh spam. Gia hạn tên miền đúng hạn và **không xoá** 4 bản ghi trên.
 
 ---
 
