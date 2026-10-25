@@ -34,11 +34,18 @@
     return !!(c.enabled && c.dc && c.u && c.id);
   }
 
+  function host() {
+    var c = cfg();
+    return c.host || (c.dc + '.list-manage.com');
+  }
+
   function endpoint() {
     var c = cfg();
-    return 'https://' + c.dc + '.list-manage.com/subscribe/post' +
+    var url = 'https://' + host() + '/subscribe/post' +
       '?u=' + encodeURIComponent(c.u) +
       '&id=' + encodeURIComponent(c.id);
+    if (c.f_id) url += '&f_id=' + encodeURIComponent(c.f_id);
+    return url;
   }
 
   function log() {

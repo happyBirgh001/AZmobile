@@ -4,13 +4,13 @@
    ĐÂY LÀ FILE DUY NHẤT BẠN CẦN SỬA ĐỂ BẬT TÍNH NĂNG
    "Đăng ký tài khoản = nhận email khuyến mãi".
 
-   Cách lấy `u` và `id` (2 phút):
-     1. Đăng nhập Mailchimp → Audience (Audience dashboard)
-     2. Menu "Manage Audience" → Signup forms → Embedded forms
-     3. Ở khung code hiện ra, tìm dòng:
-          <form action="https://xxx.us13.list-manage.com/subscribe/post?u=abc123&id=def456" ...>
-        → `u` = phần sau "u=", `id` = phần sau "id="
-     4. Dán vào dưới đây, đổi enabled thành true.
+   Cách lấy `u`, `id`, `f_id` (2 phút):
+     1. Mailchimp → menu trái "Forms" → khung "Embedded form" → "Create embedded form"
+     2. Chọn audience → lưu → mở phần "Embed code" (mã nhúng)
+     3. Trong code tìm dòng:
+          <form action="https://xxx.us13.list-manage.com/subscribe/post?u=abc123&id=def456&f_id=..." ...>
+        → `u`, `id`, `f_id` là phần sau mỗi dấu "=", còn `host` là tên miền trong action
+     4. Dán vào dưới đây, đặt enabled: true.
 
    LƯU Ý BẢO MẬT: `u` và `id` là thông tin CÔNG KHAI (nằm sẵn trong mã
    HTML của form Mailchimp), KHÔNG phải API key. Tuyệt đối KHÔNG dán
@@ -19,14 +19,20 @@
    ========================================================= */
 window.AZMC_CONFIG = {
   /* Bật/tắt toàn bộ tính năng. false = website chạy bình thường, không gửi gì. */
-  enabled: false,
+  enabled: true,
 
   /* Data center của tài khoản: us13, us14, us21... (xem trong URL admin.mailchimp.com) */
   dc: 'us13',
 
-  /* Lấy từ action URL của Embedded form (xem hướng dẫn ở trên) */
-  u: '',   // ví dụ: 'a1b2c3d4e5f6a7b8c9d0e1f2a'
-  id: '',  // ví dụ: '0123456789'
+  /* Host đầy đủ lấy từ action URL của Embedded form.
+     Một số tài khoản có tiền tố tên account (ví dụ "gmail.us13.list-manage.com").
+     Để trống '' thì module tự dùng "<dc>.list-manage.com". */
+  host: 'gmail.us13.list-manage.com',
+
+  /* Lấy từ action URL của Embedded form */
+  u: '2f99b106f90b0a0b510670b13',
+  id: 'bd72b945e7',
+  f_id: '00b38eeaf0',
 
   /* Audience của bạn có bật double opt-in không?
      true  → Mailchimp gửi 1 email xác nhận, khách bấm xong mới vào danh sách (an toàn hơn, ít spam hơn)
